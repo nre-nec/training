@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تصنيفات جامعة العلوم والتكنولوجيا الأردنية 2025-2026</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts: Cairo for Arabic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons: FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        /* JUST Brand Colors - Approximation */
+        .bg-just-red { background-color: #8a1538; }
+        .text-just-red { color: #8a1538; }
+        .border-just-red { border-color: #8a1538; }
+        
+        .bg-just-gray { background-color: #f3f4f6; }
+        
+        /* Custom Animations */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+
+        /* Smooth Scroll Padding */
+        html {
+            scroll-padding-top: 80px;
+        }
+
+        /* Hero Pattern */
+        .hero-pattern {
+            background-image: linear-gradient(rgba(138, 21, 56, 0.85), rgba(138, 21, 56, 0.7)), url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Card Hover Effect */
+        .rank-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .rank-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-just-red rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg leading-tight text-gray-900">جامعة العلوم والتكنولوجيا</span>
+                    <span class="text-xs text-just-red font-semibold">Jordan University of Science and Technology</span>
+                </div>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-reverse space-x-6">
+                <a href="#home" class="text-gray-600 hover:text-just-red font-semibold transition">الرئيسية</a>
+                <a href="#qs-ranking" class="text-gray-600 hover:text-just-red font-semibold transition">تصنيف QS</a>
+                <a href="#shanghai" class="text-gray-600 hover:text-just-red font-semibold transition">شنغهاي (جديد)</a>
+                <a href="#subjects" class="text-gray-600 hover:text-just-red font-semibold transition">التخصصات</a>
+                <a href="#local" class="text-gray-600 hover:text-just-red font-semibold transition">محلياً وإقليمياً</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-gray-600 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <a href="#home" class="block py-3 px-4 text-gray-700 hover:bg-gray-100 border-b">الرئيسية</a>
+            <a href="#qs-ranking" class="block py-3 px-4 text-gray-700 hover:bg-gray-100 border-b">تصنيف QS</a>
+            <a href="#shanghai" class="block py-3 px-4 text-gray-700 hover:bg-gray-100 border-b">شنغهاي (جديد)</a>
+            <a href="#subjects" class="block py-3 px-4 text-gray-700 hover:bg-gray-100 border-b">التخصصات</a>
+            <a href="#local" class="block py-3 px-4 text-gray-700 hover:bg-gray-100">محلياً وإقليمياً</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-pattern min-h-screen flex items-center justify-center text-white pt-20">
+        <div class="container mx-auto px-4 text-center">
+            <span class="inline-block py-1 px-3 border border-white/30 rounded-full bg-white/10 backdrop-blur-sm text-sm mb-4 animate-on-scroll">
+                التقرير المحدث الشامل 2025-2026
+            </span>
+            <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight animate-on-scroll delay-100">
+                ريادة عالمية وتميز طبي<br>
+                <span class="text-yellow-400">جوهرة الجامعات الأردنية</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-100 mb-10 max-w-2xl mx-auto animate-on-scroll delay-200">
+                قفزة نوعية في تصنيفات QS العالمية، وإنجاز استثنائي بدخول تصنيف شنغهاي للتخصصات، مع الحفاظ على الصدارة المحلية في المجالات الطبية.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-on-scroll delay-300">
+                <a href="#qs-ranking" class="bg-yellow-500 text-just-red font-bold py-3 px-8 rounded-full hover:bg-yellow-400 transition shadow-lg transform hover:scale-105">
+                    استكشف الأرقام
+                </a>
+                <a href="#shanghai" class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-full hover:bg-white/10 transition">
+                    إنجاز شنغهاي الجديد
+                </a>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 max-w-4xl mx-auto border-t border-white/20 pt-8 animate-on-scroll delay-300">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-400">461</div>
+                    <div class="text-sm text-gray-200">عالمياً (QS)</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-400">#1</div>
+                    <div class="text-sm text-gray-200">محلياً (طبياً)</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-400">+93</div>
+                    <div class="text-sm text-gray-200">قفزة في الترتيب</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-400">16</div>
+                    <div class="text-sm text-gray-200">عربياً</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QS Ranking Section -->
+    <section id="qs-ranking" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 animate-on-scroll">
+                    <div class="inline-flex items-center gap-2 text-just-red font-bold mb-2">
+                        <i class="fas fa-trophy"></i>
+                        <span>QS World University Rankings 2026</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">قفزة نوعية نحو العالمية</h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        حققت جامعة العلوم والتكنولوجيا المرتبة <span class="font-bold text-just-red">461 عالمياً</span>، وهو ترتيب متقدم جداً لجامعة عمرها أقل من 40 عاماً. يمثل هذا الترتيب قفزة هائلة من المرتبة 554 في عام 2024، أي تحسن بمقدار <span class="bg-yellow-100 text-yellow-800 px-1 rounded font-bold">93 مرتبة</span> في عام واحد فقط.
+                    </p>
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="font-bold text-lg mb-4 text-gray-800">تطور التصنيف العالمي</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-semibold">2026 (الحالي)</span>
+                                    <span class="font-bold text-just-red">461</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-4">
+                                    <div class="bg-just-red h-4 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-500">2024 (السابق)</span>
+                                    <span class="text-gray-500">554</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-4 opacity-60">
+                                    <div class="bg-gray-500 h-4 rounded-full" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 grid grid-cols-1 gap-6 animate-on-scroll delay-200">
+                    <div class="rank-card bg-white p-6 rounded-xl shadow-lg border-r-4 border-blue-500">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl">
+                                <i class="fas fa-globe-americas"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg">التصنيف العالمي</h4>
+                                <p class="text-sm text-gray-500">أفضل 500 جامعة</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700">ترسخ الجامعة مكانتها ضمن أفضل الجامعات العالمية، متفوقة على العديد من الجامعات العريقة.</p>
+                    </div>
+
+                    <div class="rank-card bg-white p-6 rounded-xl shadow-lg border-r-4 border-green-500">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl">
+                                <i class="fas fa-kaaba"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg">المنطقة العربية</h4>
+                                <p class="text-sm text-gray-500">المرتبة 16 عربياً</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700">مركز متقدم يعكس مكانتها بين جامعات المنطقة العربية في تصنيف QS Arab Region Rankings 2026.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shanghai (ARWU) Section -->
+    <section id="shanghai" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 animate-on-scroll">
+                <span class="text-just-red font-bold tracking-wider uppercase text-sm">إنجاز جديد 2025</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">تصنيف شنغهاي الأكاديمي (ARWU)</h2>
+                <div class="w-24 h-1 bg-just-red mx-auto mt-4 rounded-full"></div>
+                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">
+                    دخول الجامعة لتصنيفات شنغهاي للتخصصات الأكاديمية يُعد إنجازاً استثنائياً، محققة الصدارة المحلية في المجالات الطبية.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1: Dentistry -->
+                <div class="rank-card bg-white rounded-xl shadow-md overflow-hidden animate-on-scroll delay-100">
+                    <div class="h-2 bg-purple-600"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 text-2xl">
+                                <i class="fas fa-tooth"></i>
+                            </div>
+                            <span class="bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded">الأولى إقليمياً</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">طب الأسنان</h3>
+                        <p class="text-3xl font-bold text-purple-600 mb-2">151-200</p>
+                        <p class="text-sm text-gray-500 mb-4">على مستوى العالم</p>
+                        <ul class="text-sm text-gray-600 space-y-2 border-t pt-4">
+                            <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> الأولى محلياً</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> الأولى إقليمياً</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Card 2: Nursing -->
+                <div class="rank-card bg-white rounded-xl shadow-md overflow-hidden animate-on-scroll delay-200">
+                    <div class="h-2 bg-blue-500"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-2xl">
+                                <i class="fas fa-user-nurse"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">التمريض</h3>
+                        <p class="text-3xl font-bold text-blue-600 mb-2">201-300</p>
+                        <p class="text-sm text-gray-500 mb-4">على مستوى العالم</p>
+                        <ul class="text-sm text-gray-600 space-y-2 border-t pt-4">
+                            <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> مركز عالمي متقدم</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-star text-yellow-400"></i> سمعة أكاديمية عالية</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Card 3: Clinical Medicine -->
+                <div class="rank-card bg-white rounded-xl shadow-md overflow-hidden animate-on-scroll delay-300">
+                    <div class="h-2 bg-teal-500"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center text-teal-600 text-2xl">
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                            <span class="bg-teal-100 text-teal-800 text-xs font-bold px-2 py-1 rounded">الأولى محلياً</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">الطب السريري</h3>
+                        <p class="text-3xl font-bold text-teal-600 mb-2">401-500</p>
+                        <p class="text-sm text-gray-500 mb-4">على مستوى العالم</p>
+                        <ul class="text-sm text-gray-600 space-y-2 border-t pt-4">
+                            <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> الأولى محلياً</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-chart-line text-blue-400"></i> أداء بحثي قوي</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Card 4: Public Health -->
+                <div class="rank-card bg-white rounded-xl shadow-md overflow-hidden animate-on-scroll delay-300">
+                    <div class="h-2 bg-orange-500"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600 text-2xl">
+                                <i class="fas fa-notes-medical"></i>
+                            </div>
+                            <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded">الأولى محلياً</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">الصحة العامة</h3>
+                        <p class="text-3xl font-bold text-orange-600 mb-2">401-500</p>
+                        <p class="text-sm text-gray-500 mb-4">على مستوى العالم</p>
+                        <ul class="text-sm text-gray-600 space-y-2 border-t pt-4">
+                            <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> الأولى محلياً</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-globe text-blue-400"></i> تأثير مجتمعي</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Subject Rankings Table -->
+    <section id="subjects" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row gap-12">
+                <!-- Content -->
+                <div class="lg:w-1/3 animate-on-scroll">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">التفوق في التخصصات</h2>
+                    <p class="text-gray-600 mb-6">
+                        تعكس الترتيبات قوة الجامعة المتوازنة في كل من المجالات الهندسية والطبية. تتميز الجامعة ببيئة بحثية خصبة أنتجت أكثر من 20,493 منشوراً أكاديمياً وأكثر من 407,000 استشهاد علمي.
+                    </p>
+                    <div class="p-6 bg-just-red text-white rounded-xl shadow-lg">
+                        <h4 class="font-bold text-xl mb-4 border-b border-white/20 pb-2">مؤشرات التميز</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-file-alt mt-1 text-yellow-400"></i>
+                                <div>
+                                    <span class="block font-bold">20,493</span>
+                                    <span class="text-sm text-gray-200">منشورة أكاديمية</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-quote-right mt-1 text-yellow-400"></i>
+                                <div>
+                                    <span class="block font-bold">407,415</span>
+                                    <span class="text-sm text-gray-200">استشهاد علمي</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-star mt-1 text-yellow-400"></i>
+                                <div>
+                                    <span class="block font-bold">500+</span>
+                                    <span class="text-sm text-gray-200">بحث في أفضل 50% من المجلات</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tables -->
+                <div class="lg:w-2/3 animate-on-scroll delay-200">
+                    <!-- QS Subjects -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/QS_World_University_Rankings_logo.svg/1200px-QS_World_University_Rankings_logo.svg.png" alt="QS" class="h-6">
+                            <span>تصنيف QS للتخصصات</span>
+                        </h3>
+                        <div class="overflow-x-auto rounded-lg shadow border border-gray-200">
+                            <table class="w-full text-sm text-right text-gray-600">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">التخصص</th>
+                                        <th scope="col" class="px-6 py-3">الترتيب العالمي</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b hover:bg-gray-50">
+                                        <td class="px-6 py-4 font-bold">الهندسة المدنية</td>
+                                        <td class="px-6 py-4 text-just-red font-semibold">151-200</td>
+                                    </tr>
+                                    <tr class="bg-white border-b hover:bg-gray-50">
+                                        <td class="px-6 py-4">الهندسة الكهربائية</td>
+                                        <td class="px-6 py-4">251-300</td>
+                                    </tr>
+                                    <tr class="bg-white border-b hover:bg-gray-50">
+                                        <td class="px-6 py-4">علوم الحاسوب</td>
+                                        <td class="px-6 py-4">251-300</td>
+                                    </tr>
+                                    <tr class="bg-white border-b hover:bg-gray-50">
+                                        <td class="px-6 py-4">الصيدلة</td>
+                                        <td class="px-6 py-4">251-300</td>
+                                    </tr>
+                                    <tr class="bg-white border-b hover:bg-gray-50">
+                                        <td class="px-6 py-4">الهندسة الميكانيكية</td>
+                                        <td class="px-6 py-4">301-350</td>
+                                    </tr>
+                                    <tr class="bg-white hover:bg-gray-50">
+                                        <td class="px-6 py-4">الطب</td>
+                                        <td class="px-6 py-4">351-400</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- THE Highlight -->
+                    <div class="bg-gray-900 text-white p-6 rounded-xl flex items-center justify-between flex-wrap gap-4 shadow-lg">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-200 mb-1">تصنيف THE World Rankings 2025</h3>
+                            <p class="text-sm text-gray-400">تميز عالمي في الطب السريري</p>
+                        </div>
+                        <div class="flex items-center gap-6 text-center">
+                            <div>
+                                <div class="text-2xl font-bold text-yellow-400">801-1000</div>
+                                <div class="text-xs text-gray-400">الترتيب العام</div>
+                            </div>
+                            <div class="w-px h-10 bg-gray-700"></div>
+                            <div>
+                                <div class="text-2xl font-bold text-yellow-400">222</div>
+                                <div class="text-xs text-gray-400">الطب السريري</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Local & Comparison Section -->
+    <section id="local" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 animate-on-scroll">
+                <h2 class="text-3xl font-bold text-gray-900">المكانة المحلية والإقليمية</h2>
+                <p class="text-gray-600 mt-2">مقارنة مع نظيراتها، تحتل JUST موقعاً استراتيجياً</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Local Standing -->
+                <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+                    <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center text-red-600 text-2xl mb-4">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">محلياً (الأردن)</h3>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li class="flex items-center justify-between border-b pb-2">
+                            <span>الترتيب العام</span>
+                            <span class="font-bold text-gray-800">المرتبة الثانية</span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-2">
+                            <span>التخصصات الطبية</span>
+                            <span class="font-bold text-green-600">المرتبة الأولى (شنغهاي)</span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-2">
+                            <span>الاستدامة البيئية</span>
+                            <span class="font-bold text-green-600">المرتبة الأولى</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Regional Standing -->
+                <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mb-4">
+                        <i class="fas fa-globe-asia"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">إقليمياً (العرب & آسيا)</h3>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li class="flex items-center justify-between border-b pb-2">
+                            <span>QS المنطقة العربية</span>
+                            <span class="font-bold text-gray-800">المرتبة 16</span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-2">
+                            <span>US News آسيا</span>
+                            <span class="font-bold text-gray-800">المرتبة 114</span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-2">
+                            <span>Green Metrics آسيا</span>
+                            <span class="font-bold text-gray-800">المرتبة 79</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Other Rankings -->
+                <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+                    <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 text-2xl mb-4">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">تصنيفات أخرى 2025</h3>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li class="flex items-center justify-between border-b pb-2">
+                            <span>Scimago Institutions</span>
+                            <span class="font-bold">1191 عالمياً</span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-2">
+                            <span>EduRank Global</span>
+                            <span class="font-bold">1432 عالمياً</span>
+                        </li>
+                        <li class="flex items-center justify-between border-b pb-2">
+                            <span>US News Global</span>
+                            <span class="font-bold">544 عالمياً</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="flex items-center gap-3 mb-4 md:mb-0">
+                    <div class="w-12 h-12 bg-just-red rounded-full flex items-center justify-center font-bold text-2xl">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold">جامعة العلوم والتكنولوجيا الأردنية</h3>
+                        <p class="text-sm text-gray-400">Jordan University of Science and Technology</p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-just-red transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-just-red transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-just-red transition"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-just-red transition"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2025 جامعة العلوم والتكنولوجيا الأردنية. جميع الحقوق محفوظة.</p>
+                <p class="mt-2">تم تحديث البيانات بناءً على تقرير التصنيف 2025-2026.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-lg');
+                nav.classList.replace('py-3', 'py-2');
+            } else {
+                nav.classList.remove('shadow-lg');
+                nav.classList.replace('py-2', 'py-3');
+            }
+        });
+    </script>
+</body>
+</html>
