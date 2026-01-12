@@ -49,6 +49,13 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* تأثير الخلفية المتحركة */
+        .glass-bg {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
     </style>
 </head>
 
@@ -108,6 +115,36 @@
             { id: 2, title: "الإحصائيات والأرقام", content: "• نسبة رضا الطلاب: 98%\n• عدد الشراكات: 15 مستشفى\n• الاعتمادات: 3 اعتمادات دولية", image: "https://placehold.co/600x400/5D4068/FFF?text=Chart", slideIcon: "chart", modalTitle: "تفاصيل الرسم البياني", modalContent: "يوضح الرسم البياني النمو المتصاعد في أعداد المقبولين." }
         ];
 
+        // مكون الكرات الضوئية المتحركة في الخلفية
+        const BackgroundOrbs = () => (
+            <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-gray-50">
+                <motion.div
+                    animate={{
+                        x: [0, 100, -50, 0],
+                        y: [0, 50, 100, 0],
+                    }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className="absolute -top-20 -right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+                />
+                <motion.div
+                    animate={{
+                        x: [0, -100, 50, 0],
+                        y: [0, 100, -50, 0],
+                    }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                    className="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary/15 rounded-full blur-3xl"
+                />
+                <motion.div
+                    animate={{
+                        scale: [1, 1.2, 0.8, 1],
+                        opacity: [0.3, 0.5, 0.3],
+                    }}
+                    transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-1/2 left-1/3 w-64 h-64 bg-primary/5 rounded-full blur-2xl"
+                />
+            </div>
+        );
+
         function App() {
             const [mode, setMode] = useState('editor');
             const [slides, setSlides] = useState(initialSlides);
@@ -150,21 +187,49 @@
     <script src="https://cdn.tailwindcss.com"><\/script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
-        body { font-family: 'Cairo', sans-serif; }
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; overflow: hidden; }
         .text-primary { color: #5D4068; }
         .bg-primary { background-color: #5D4068; }
         .text-secondary { color: #C5B358; }
         .bg-secondary { background-color: #C5B358; }
-        .border-primary { border-color: #5D4068; }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.5;
+            animation: move 20s infinite linear;
+        }
+        @keyframes move {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(100px, 50px) scale(1.1); }
+            66% { transform: translate(-50px, 100px) scale(0.9); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        .orb-1 { width: 400px; height: 400px; background: rgba(93, 64, 104, 0.15); top: -100px; right: -100px; }
+        .orb-2 { width: 350px; height: 350px; background: rgba(197, 179, 88, 0.2); bottom: -100px; left: -100px; animation-duration: 25s; }
+        .orb-3 { width: 300px; height: 300px; background: rgba(93, 64, 104, 0.1); top: 40%; left: 30%; animation-duration: 30s; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 <body>
-    <div id="root" class="relative w-full h-screen overflow-hidden bg-white flex flex-col">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div id="root" class="relative w-full h-screen overflow-hidden flex flex-col">
         <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" class="fixed top-5 left-5 w-24 z-50 drop-shadow-md" />
         <div class="flex-1 flex items-center justify-center p-4 relative" id="slideContainer"></div>
-        <div class="flex items-center justify-center gap-4 py-4 bg-gray-50 border-t">
+        <div class="flex items-center justify-center gap-4 py-4 bg-white/50 backdrop-blur-md border-t">
             <span id="slideCounter" class="text-sm text-gray-600 font-medium"></span>
-            <div class="h-2 bg-gray-200 flex-1"><div class="h-full bg-secondary" id="progressFill" style="width: 0%"></div></div>
+            <div class="h-2 bg-gray-200/50 flex-1 rounded-full"><div class="h-full bg-secondary rounded-full" id="progressFill" style="width: 0%"></div></div>
         </div>
     </div>
     <script>
@@ -195,26 +260,27 @@
         function renderSlide(index) {
             const slide = slidesData[index];
             const icon = heroIcons[slide.slideIcon] || '<span class="text-6xl text-secondary">✦</span>';
-            document.getElementById('slideContainer').innerHTML = \`
-                <div class="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row" style="min-height: 70vh">
+            const slideHTML = \`
+                <div class="w-full max-w-6xl glass-card rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row relative z-10" style="min-height: 70vh">
                     <div class="\${slide.image ? 'md:w-1/2' : 'w-full text-center'} p-10 flex flex-col justify-center">
                         <div class="mb-6"><div class="text-6xl mb-3 text-secondary">\${icon}</div><h1 class="text-4xl md:text-5xl font-black text-primary">\${slide.title}</h1></div>
                         <div class="text-xl md:text-2xl text-gray-600 leading-relaxed whitespace-pre-line mb-8">\${slide.content}</div>
                         <div class="\${!slide.image ? 'mx-auto' : ''} mt-auto">
-                            <button onclick="showModal()" class="bg-primary text-white px-8 py-3 rounded-full text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252]"><span>مثال عملي</span>\${Icons.Left}</button>
+                            <button onclick="showModal()" class="bg-primary text-white px-8 py-3 rounded-full text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252] transition-transform active:scale-95"><span>مثال عملي</span>\${Icons.Left}</button>
                         </div>
                     </div>
-                    \${slide.image ? \`<div class="md:w-1/2 bg-gray-100 flex items-center justify-center p-4 border-r border-gray-200"><img src="\${slide.image}" class="max-w-full max-h-[500px] object-contain rounded-lg shadow-sm" /></div>\` : ''}
+                    \${slide.image ? \`<div class="md:w-1/2 bg-gray-50/50 flex items-center justify-center p-4 border-r border-gray-200/50"><img src="\${slide.image}" class="max-w-full max-h-[500px] object-contain rounded-lg shadow-sm" /></div>\` : ''}
                 </div>
-                <button onclick="prevSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block">\${Icons.Right}</button>
-                <button onclick="nextSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block">\${Icons.Left}</button>
-                <div id="modalOverlay" class="fixed inset-0 bg-primary/90 z-[100] flex items-center justify-center p-4 backdrop-blur-sm hidden" onclick="closeModal()">
-                    <div class="bg-white w-full max-w-lg rounded-2xl p-8 shadow-2xl relative text-center" onclick="event.stopPropagation()">
+                <button onclick="prevSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block z-20">\${Icons.Right}</button>
+                <button onclick="nextSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block z-20">\${Icons.Left}</button>
+                <div id="modalOverlay" class="fixed inset-0 bg-primary/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md hidden" onclick="closeModal()">
+                    <div class="bg-white/95 w-full max-w-lg rounded-2xl p-8 shadow-2xl relative text-center" onclick="event.stopPropagation()">
                         <button onclick="closeModal()" class="absolute top-4 left-4 text-gray-400 hover:text-red-500">\${Icons.Close}</button>
                         <h2 class="text-3xl font-bold text-primary mb-4">\${slide.modalTitle}</h2>
-                        <div class="text-lg text-gray-600 bg-gray-50 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto">\${slide.modalContent}</div>
+                        <div class="text-lg text-gray-600 bg-gray-50/50 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto">\${slide.modalContent}</div>
                     </div>
                 </div>\`;
+            document.getElementById('slideContainer').innerHTML = slideHTML;
             document.getElementById('slideCounter').textContent = \`الشريحة \${index + 1} من \${slidesData.length}\`;
             document.getElementById('progressFill').style.width = ((index + 1) / slidesData.length * 100) + '%';
         }
@@ -251,8 +317,11 @@
                 const progress = ((currentSlideIndex + 1) / slides.length) * 100;
                 return (
                     <div className="relative w-full h-screen overflow-hidden bg-white flex flex-col">
+                        <BackgroundOrbs />
+
                         <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" className="fixed top-5 left-5 w-24 z-50 drop-shadow-md" />
-                        <button onClick={() => setMode('editor')} className="fixed top-5 right-5 z-50 bg-gray-200 p-2 rounded-full hover:bg-gray-300"><Icons.Edit /></button>
+                        <button onClick={() => setMode('editor')} className="fixed top-5 right-5 z-50 bg-gray-200/50 backdrop-blur-md p-2 rounded-full hover:bg-gray-300 transition-colors"><Icons.Edit /></button>
+
                         <div className="flex-1 flex items-center justify-center p-4 relative">
                             <AnimatePresence mode="wait">
                                 <motion.div
@@ -263,11 +332,11 @@
                                         if (info.offset.x < -50) nextSlide();
                                         else if (info.offset.x > 50) prevSlide();
                                     }}
-                                    initial={{ opacity: 0, x: 50 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -50 }}
+                                    initial={{ opacity: 0, x: 50, scale: 0.95 }}
+                                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                                    exit={{ opacity: 0, x: -50, scale: 0.95 }}
                                     transition={{ duration: 0.5 }}
-                                    className="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row cursor-grab active:cursor-grabbing"
+                                    className="w-full max-w-6xl glass-bg rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row cursor-grab active:cursor-grabbing relative z-10"
                                     style={{ minHeight: '70vh' }}
                                 >
                                     <div className={`p-10 flex flex-col justify-center ${slide.image ? 'md:w-1/2' : 'w-full text-center'}`}>
@@ -282,32 +351,37 @@
                                         </div>
                                         <div className="text-xl md:text-2xl text-gray-600 leading-relaxed whitespace-pre-line mb-8">{slide.content}</div>
                                         <div className={`mt-auto ${!slide.image ? 'mx-auto' : ''}`}>
-                                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowModal(true)} className="bg-primary text-white px-8 py-3 rounded-full text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252]">
+                                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowModal(true)} className="bg-primary text-white px-8 py-3 rounded-full text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252] transition-all">
                                                 <span>مثال عملي</span><Icons.Left />
                                             </motion.button>
                                         </div>
                                     </div>
                                     {slide.image && (
-                                        <div className="md:w-1/2 bg-gray-100 flex items-center justify-center p-4 border-r border-gray-200">
+                                        <div className="md:w-1/2 bg-gray-50/50 flex items-center justify-center p-4 border-r border-gray-200">
                                             <img src={slide.image} alt="Visual" className="max-w-full max-h-[500px] object-contain rounded-lg shadow-sm" />
                                         </div>
                                     )}
                                 </motion.div>
                             </AnimatePresence>
-                            <button onClick={prevSlide} className="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block"><Icons.Right /></button>
-                            <button onClick={nextSlide} className="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block"><Icons.Left /></button>
+
+                            <button onClick={prevSlide} className="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all hidden md:block z-20"><Icons.Right /></button>
+                            <button onClick={nextSlide} className="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all hidden md:block z-20"><Icons.Left /></button>
                         </div>
-                        <div className="flex items-center justify-center gap-4 py-4 bg-gray-50 border-t">
+
+                        <div className="flex items-center justify-center gap-4 py-4 bg-white/50 backdrop-blur-md border-t relative z-20">
                             <span className="text-sm text-gray-600 font-medium">الشريحة {currentSlideIndex + 1} من {slides.length}</span>
-                            <div className="h-2 bg-gray-200 flex-1"><motion.div className="h-full bg-secondary" initial={{ width: 0 }} animate={{ width: `${progress}%` }} /></div>
+                            <div className="h-2 bg-gray-200/50 flex-1 rounded-full overflow-hidden">
+                                <motion.div className="h-full bg-secondary" initial={{ width: 0 }} animate={{ width: `${progress}%` }} />
+                            </div>
                         </div>
+
                         <AnimatePresence>
                             {showModal && (
-                                <div className="fixed inset-0 bg-primary/90 z-[100] flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowModal(false)}>
-                                    <motion.div initial={{ opacity: 0, scale: 0.8, y: 50 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.8, y: 50 }} className="bg-white w-full max-w-lg rounded-2xl p-8 shadow-2xl relative text-center" onClick={(e) => e.stopPropagation()}>
+                                <div className="fixed inset-0 bg-primary/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md" onClick={() => setShowModal(false)}>
+                                    <motion.div initial={{ opacity: 0, scale: 0.8, y: 50 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.8, y: 50 }} className="bg-white/95 w-full max-w-lg rounded-2xl p-8 shadow-2xl relative text-center" onClick={(e) => e.stopPropagation()}>
                                         <button onClick={() => setShowModal(false)} className="absolute top-4 left-4 text-gray-400 hover:text-red-500"><Icons.Close /></button>
                                         <h2 className="text-3xl font-bold text-primary mb-4">{slide.modalTitle}</h2>
-                                        <div className="text-lg text-gray-600 bg-gray-50 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto">{slide.modalContent}</div>
+                                        <div className="text-lg text-gray-600 bg-gray-50/30 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto">{slide.modalContent}</div>
                                     </motion.div>
                                 </div>
                             )}
@@ -364,20 +438,6 @@
                         ))}
                         <button onClick={addNewSlide} className="w-full py-4 border-2 border-dashed border-gray-300 rounded-2xl text-gray-500 hover:border-primary hover:text-primary transition flex justify-center items-center gap-2"><Icons.Plus /> إضافة شريحة جديدة</button>
                     </div>
-                    {showHelp && (
-                        <AnimatePresence>
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/50 z-[200] flex items-center justify-center p-4" onClick={() => setShowHelp(false)}>
-                                <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-                                    <div className="sticky top-0 bg-gradient-to-r from-primary to-[#4a3252] text-white p-6 flex justify-between items-center"><h2 className="text-2xl font-black">📖 كيفية الاستخدام</h2><button onClick={() => setShowHelp(false)} className="hover:opacity-75 transition"><Icons.Close /></button></div>
-                                    <div className="p-8 space-y-8">
-                                        <div className="flex gap-4"><div className="flex-shrink-0"><div className="flex items-center justify-center h-10 w-10 rounded-lg bg-secondary text-primary font-bold">1</div></div><div><h3 className="text-lg font-bold text-primary mb-2">أضف أو عدّل الشرائح</h3><p className="text-gray-600">في لوحة التحكم، يمكنك إضافة شرائح جديدة أو تعديل الموجودة.</p></div></div>
-                                        <div className="flex gap-4"><div className="flex-shrink-0"><div className="flex items-center justify-center h-10 w-10 rounded-lg bg-secondary text-primary font-bold">2</div></div><div><h3 className="text-lg font-bold text-primary mb-2">تصفح العرض التقديمي</h3><p className="text-gray-600">يمكنك التنقل بالسحب يميناً ويساراً أو عبر الأسهم.</p></div></div>
-                                        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded"><h4 className="font-bold text-blue-900 mb-2">💡 نصائح:</h4><ul className="text-sm text-blue-800 space-y-2"><li>• استخدم السحب (Swipe) للتنقل على الجوال.</li><li>• الملف المُصدّر لا يحتوي على زر تعديل وهو جاهز للعرض.</li></ul></div>
-                                    </div>
-                                </motion.div>
-                            </motion.div>
-                        </AnimatePresence>
-                    )}
                 </div>
             );
         }
