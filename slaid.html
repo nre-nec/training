@@ -9,438 +9,334 @@
   <!DOCTYPE html>
   <html lang="ar" dir="rtl">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>منشئ العروض التقديمية</title>
-    <!-- Cairo Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <!-- Logo Favicon -->
-    <link rel="icon" href="https://nre-nec.github.io/pictures/logo.png" />
-    <!-- React 18 (development) -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <!-- Babel Standalone -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Framer Motion v10 UMD -->
-    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-    <!-- Lucide Icons UMD -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-      :root {
-        --primary: #5D4068;
-        --secondary: #C5B358;
-        --bg: #F7F6F3;
-      }
-      body {
-        font-family: 'Cairo', system-ui, sans-serif;
-        background: var(--bg);
-        min-height: 100vh;
-      }
-      .glass {
-        background: rgba(255,255,255,0.6);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(93,64,104,0.08);
-      }
-      .rtl { direction: rtl; text-align: right; }
-      .modal-blur {
-        backdrop-filter: blur(8px);
-        background: rgba(0,0,0,0.18);
-      }
-      .logo-shadow {
-        filter: drop-shadow(0 2px 8px rgba(93,64,104,0.10));
-      }
-    </style>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: '#5D4068',
-              secondary: '#C5B358',
-              bg: '#F7F6F3'
-            },
-            fontFamily: {
-              cairo: ['Cairo', 'sans-serif']
-            }
-          }
-        }
-      }
-    </script>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>منشئ العروض التقديمية - كلية الشمال</title>
+    
+      <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+      <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+      <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+      <script src="https://cdn.tailwindcss.com"></script>
+    
+      <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+
+      <style>
+          /* خط Cairo */
+          @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+        
+          body { font-family: 'Cairo', sans-serif; background-color: #f3f4f6; }
+        
+          /* ألوان مخصصة */
+          .text-primary { color: #5D4068; }
+          .bg-primary { background-color: #5D4068; }
+          .text-secondary { color: #C5B358; }
+          .bg-secondary { background-color: #C5B358; }
+          .border-primary { border-color: #5D4068; }
+        
+          /* إخفاء شريط التمرير */
+          .no-scrollbar::-webkit-scrollbar { display: none; }
+          .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="text/babel">
-      // Library destructuring (CRITICAL)
-      const { useState, useEffect, useRef } = React;
-      const { motion, AnimatePresence } = window.Motion;
-      const { Plus, Trash2, Play, Edit, X, ChevronRight, ChevronLeft, Image: ImageIcon, BarChart } = lucide;
+      <div id="root"></div>
 
-      // Sample slides
-      const defaultSlides = [
-        {
-          id: crypto.randomUUID(),
-          title: "مقدمة في العرض التقديمي",
-          body: "• أهمية العرض التقديمي\n• عناصر النجاح\n• تفاعل الجمهور",
-          visual: "",
-          exampleTitle: "مثال عملي",
-          exampleBody: "ابدأ العرض بسؤال محفز لجذب انتباه الحضور."
-        },
-        {
-          id: crypto.randomUUID(),
-          title: "استخدام الصور والرسوم",
-          body: "• تعزيز الفهم\n• جذب الانتباه\n• دعم الأفكار",
-          visual: "https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?w=800&q=60",
-          exampleTitle: "مثال عملي",
-          exampleBody: "استخدم رسم بياني يوضح تطور النتائج خلال السنوات الأخيرة."
-        }
-      ];
+      <script type="text/babel">
+          /************************************************
+           * 1. تهيئة المكتبات (الجزء الأهم لتجنب الأخطاء)
+           ************************************************/
+          const { useState, useEffect, useRef } = React;
+        
+          // استدعاء Framer Motion من النافذة مباشرة
+          const { motion, AnimatePresence } = window.Motion;
 
-      function App() {
-        const [slides, setSlides] = useState(() => {
-          try {
-            const raw = localStorage.getItem('slides_ar');
-            return raw ? JSON.parse(raw) : defaultSlides;
-          } catch { return defaultSlides; }
-        });
-        const [mode, setMode] = useState('editor'); // editor | present
-        const [current, setCurrent] = useState(0);
-        const [modal, setModal] = useState(null);
-
-        useEffect(() => {
-          localStorage.setItem('slides_ar', JSON.stringify(slides));
-        }, [slides]);
-
-        // Keyboard navigation in presentation mode
-        useEffect(() => {
-          if (mode !== 'present') return;
-          const handler = (e) => {
-            if (e.key === 'ArrowLeft') prevSlide();
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'Escape') setMode('editor');
+          // أيقونات SVG مدمجة لتجنب مشاكل المكتبات الخارجية
+          const Icons = {
+              Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
+              Trash: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>,
+              Play: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>,
+              Edit: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>,
+              Close: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>,
+              Right: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>,
+              Left: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>,
+              Image: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
           };
-          window.addEventListener('keydown', handler);
-          return () => window.removeEventListener('keydown', handler);
-        }, [mode, current, slides.length]);
 
-        // Touch swipe navigation
-        const touchStartX = useRef(null);
-        function handleTouchStart(e) {
-          touchStartX.current = e.touches[0].clientX;
-        }
-        function handleTouchEnd(e) {
-          if (touchStartX.current === null) return;
-          const dx = e.changedTouches[0].clientX - touchStartX.current;
-          if (dx > 60) prevSlide();
-          else if (dx < -60) nextSlide();
-          touchStartX.current = null;
-        }
+          /************************************************
+           * 2. البيانات الأولية (نموذج)
+           ************************************************/
+          const initialSlides = [
+              {
+                  id: 1,
+                  title: "رؤية الكلية والتميز",
+                  content: "• الريادة في تقديم تعليم تمريضي مبتكر.\n• تخريج كوادر وطنية مؤهلة.\n• بيئة تعليمية محفزة.",
+                  image: "", // اتركها فارغة لتجربة النص الكامل
+                  modalTitle: "قصة نجاح",
+                  modalContent: "تم تخريج 300 طالب وطالبة هذا العام بنسبة توظيف بلغت 95%."
+              },
+              {
+                  id: 2,
+                  title: "الإحصائيات والأرقام",
+                  content: "• نسبة رضا الطلاب: 98%\n• عدد الشراكات: 15 مستشفى\n• الاعتمادات: 3 اعتمادات دولية",
+                  image: "https://placehold.co/600x400/5D4068/FFF?text=Chart", 
+                  modalTitle: "تفاصيل الرسم البياني",
+                  modalContent: "يوضح الرسم البياني النمو المتصاعد في أعداد المقبولين."
+              }
+          ];
 
-        function addSlide() {
-          setSlides(s => [...s, {
-            id: crypto.randomUUID(),
-            title: "",
-            body: "",
-            visual: "",
-            exampleTitle: "",
-            exampleBody: ""
-          }]);
-        }
-        function updateSlide(id, key, value) {
-          setSlides(s => s.map(sl => sl.id === id ? { ...sl, [key]: value } : sl));
-        }
-        function deleteSlide(id) {
-          setSlides(s => s.filter(sl => sl.id !== id));
-          if (current >= slides.length - 1) setCurrent(Math.max(0, slides.length - 2));
-        }
-        function moveSlide(id, dir) {
-          setSlides(s => {
-            const idx = s.findIndex(sl => sl.id === id);
-            const newIdx = idx + dir;
-            if (newIdx < 0 || newIdx >= s.length) return s;
-            const arr = [...s];
-            const [item] = arr.splice(idx, 1);
-            arr.splice(newIdx, 0, item);
-            return arr;
-          });
-        }
-        function nextSlide() {
-          setCurrent(c => Math.min(slides.length - 1, c + 1));
-        }
-        function prevSlide() {
-          setCurrent(c => Math.max(0, c - 1));
-        }
+          /************************************************
+           * 3. مكون التطبيق الرئيسي (App Component)
+           ************************************************/
+          function App() {
+              const [mode, setMode] = useState('editor'); // 'editor' or 'presentation'
+              const [slides, setSlides] = useState(initialSlides);
+              const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+              const [showModal, setShowModal] = useState(false);
 
-        // Modal open/close
-        function openModal(slide) {
-          setModal({ title: slide.exampleTitle, body: slide.exampleBody });
-        }
-        function closeModal() {
-          setModal(null);
-        }
+              // --- دوال التحكم ---
+              const addNewSlide = () => {
+                  const newId = slides.length + 1;
+                  setSlides([...slides, { 
+                      id: newId, 
+                      title: "شريحة جديدة", 
+                      content: "اكتب النقاط هنا...", 
+                      image: "", 
+                      modalTitle: "عنوان المثال", 
+                      modalContent: "تفاصيل المثال..." 
+                  }]);
+              };
 
-        // Logo
-        const logo = (
-          <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" className="w-16 h-16 logo-shadow rounded-full bg-white p-2" />
-        );
+              const updateSlide = (id, field, value) => {
+                  setSlides(slides.map(s => s.id === id ? { ...s, [field]: value } : s));
+              };
 
-        return (
-          <div className="min-h-screen bg-bg font-cairo">
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4">
-              <div className="flex items-center gap-3">
-                {logo}
-                <span className="text-xl font-bold text-primary">منشئ العروض التقديمية</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  className="px-4 py-2 rounded-md glass text-primary font-semibold flex items-center gap-2"
-                  onClick={() => setMode(mode === 'editor' ? 'present' : 'editor')}
-                >
-                  {mode === 'editor' ? <Play size={20} /> : <Edit size={20} />}
-                  <span>{mode === 'editor' ? 'بدء العرض' : 'العودة للمحرر'}</span>
-                </button>
-              </div>
-            </div>
+              const deleteSlide = (id) => {
+                  if (slides.length > 1) {
+                      setSlides(slides.filter(s => s.id !== id));
+                  }
+              };
 
-            {/* Main */}
-            {mode === 'editor' ? (
-              <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4 pb-12">
-                {/* Slides List */}
-                <div className="md:col-span-1">
-                  <div className="glass rounded-lg p-4 mb-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="font-bold text-primary">الشرائح</span>
-                      <button
-                        className="bg-primary text-white px-3 py-1 rounded flex items-center gap-1"
-                        onClick={addSlide}
-                      >
-                        <Plus size={18} />
-                        إضافة شريحة
-                      </button>
-                    </div>
-                    <div className="space-y-2">
-                      {slides.map((sl, i) => (
-                        <div key={sl.id} className={`flex items-center justify-between p-2 rounded ${i === current ? 'bg-secondary/10' : 'bg-white/60'}`}>
-                          <div className="flex-1 cursor-pointer" onClick={() => setCurrent(i)}>
-                            <span className="font-semibold">{sl.title || `شريحة ${i + 1}`}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <button title="أعلى" onClick={() => moveSlide(sl.id, -1)} className="p-1 rounded hover:bg-bg"><ChevronLeft size={16} /></button>
-                            <button title="أسفل" onClick={() => moveSlide(sl.id, 1)} className="p-1 rounded hover:bg-bg"><ChevronRight size={16} /></button>
-                            <button title="حذف" onClick={() => deleteSlide(sl.id)} className="p-1 rounded hover:bg-red-100 text-red-600"><Trash2 size={16} /></button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                {/* Slide Editor */}
-                <div className="md:col-span-2">
-                  {slides.length === 0 ? (
-                    <div className="glass rounded-lg p-8 text-center text-gray-500">لا توجد شرائح. أضف شريحة جديدة للبدء.</div>
-                  ) : (
-                    <div className="glass rounded-lg p-6">
-                      <div className="mb-4">
-                        <span className="font-bold text-primary">تحرير الشريحة رقم {current + 1}</span>
-                      </div>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm text-gray-700 mb-1">العنوان</label>
-                          <input
-                            className="w-full p-2 border rounded rtl"
-                            value={slides[current].title}
-                            onChange={e => updateSlide(slides[current].id, 'title', e.target.value)}
-                            placeholder="عنوان الشريحة"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm text-gray-700 mb-1">النقاط (سطر لكل نقطة)</label>
-                          <textarea
-                            className="w-full p-2 border rounded rtl"
-                            rows={4}
-                            value={slides[current].body}
-                            onChange={e => updateSlide(slides[current].id, 'body', e.target.value)}
-                            placeholder="• نقطة أولى\n• نقطة ثانية"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm text-gray-700 mb-1">رابط صورة أو رسم بياني (اختياري)</label>
-                          <input
-                            className="w-full p-2 border rounded rtl"
-                            value={slides[current].visual}
-                            onChange={e => updateSlide(slides[current].id, 'visual', e.target.value)}
-                            placeholder="https://example.com/image.png"
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-sm text-gray-700 mb-1">عنوان المثال العملي</label>
-                            <input
-                              className="w-full p-2 border rounded rtl"
-                              value={slides[current].exampleTitle}
-                              onChange={e => updateSlide(slides[current].id, 'exampleTitle', e.target.value)}
-                              placeholder="مثال عملي"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm text-gray-700 mb-1">نص المثال العملي</label>
-                            <input
-                              className="w-full p-2 border rounded rtl"
-                              value={slides[current].exampleBody}
-                              onChange={e => updateSlide(slides[current].id, 'exampleBody', e.target.value)}
-                              placeholder="شرح المثال العملي"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : (
-              // Presentation Mode
-              <div
-                className="fixed inset-0 z-30 bg-bg flex flex-col"
-                tabIndex={0}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-              >
-                {/* Top Bar */}
-                <div className="flex items-center justify-between px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    {logo}
-                    <span className="font-bold text-primary">العرض التقديمي</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button className="p-2 rounded bg-white/80 border" onClick={() => setMode('editor')}>
-                      <Edit size={20} />
-                    </button>
-                  </div>
-                </div>
-                {/* Slide Content */}
-                <div className="flex-1 flex items-center justify-center px-2 md:px-12">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={slides[current]?.id}
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -40 }}
-                      transition={{ type: "spring", stiffness: 260, damping: 22 }}
-                      className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
-                    >
-                      {/* Right: Text */}
-                      <div className="rtl">
-                        <h2 className="text-3xl font-extrabold mb-4 text-primary">{slides[current]?.title}</h2>
-                        <ul className="space-y-2 text-lg text-gray-800 mb-6">
-                          {slides[current]?.body?.split('\n').map((ln, i) =>
-                            <li key={i} className="flex items-start gap-2">
-                              <span className="text-secondary font-bold">•</span>
-                              <span>{ln}</span>
-                            </li>
-                          )}
-                        </ul>
-                        {slides[current]?.exampleTitle && (
-                          <button
-                            className="px-5 py-2 rounded-md bg-secondary text-white font-semibold shadow"
-                            onClick={() => openModal(slides[current])}
-                          >
-                            {slides[current]?.exampleTitle || "مثال عملي"}
+              const nextSlide = () => {
+                  if (currentSlideIndex < slides.length - 1) setCurrentSlideIndex(prev => prev + 1);
+                  else setCurrentSlideIndex(0); // Loop
+              };
+
+              const prevSlide = () => {
+                  if (currentSlideIndex > 0) setCurrentSlideIndex(prev => prev - 1);
+                  else setCurrentSlideIndex(slides.length - 1);
+              };
+
+              // دعم لوحة المفاتيح
+              useEffect(() => {
+                  const handleKeyDown = (e) => {
+                      if (mode === 'presentation') {
+                          if (e.key === 'ArrowLeft') nextSlide(); // RTL منطق
+                          if (e.key === 'ArrowRight') prevSlide();
+                          if (e.key === 'Escape') setMode('editor');
+                      }
+                  };
+                  window.addEventListener('keydown', handleKeyDown);
+                  return () => window.removeEventListener('keydown', handleKeyDown);
+              }, [mode, currentSlideIndex]);
+
+              // --- واجهة العرض (Presentation Mode) ---
+              if (mode === 'presentation') {
+                  const slide = slides[currentSlideIndex];
+                  const progress = ((currentSlideIndex + 1) / slides.length) * 100;
+
+                  return (
+                      <div className="relative w-full h-screen overflow-hidden bg-white flex flex-col">
+                          {/* شعار ثابت */}
+                          <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" className="fixed top-5 left-5 w-24 z-50 drop-shadow-md" />
+                        
+                          {/* زر الخروج */}
+                          <button onClick={() => setMode('editor')} className="fixed top-5 right-5 z-50 bg-gray-200 p-2 rounded-full hover:bg-gray-300">
+                              <Icons.Edit />
                           </button>
-                        )}
-                      </div>
-                      {/* Left: Visual */}
-                      <div className="flex items-center justify-center">
-                        {slides[current]?.visual ? (
-                          <motion.div
-                            initial={{ scale: 0.96, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.12 }}
-                            className="w-full h-64 md:h-[400px] rounded-lg overflow-hidden shadow-lg bg-white flex items-center justify-center"
-                          >
-                            <img
-                              src={slides[current].visual}
-                              alt="Visual"
-                              className="w-full h-full object-contain"
-                              style={{ maxHeight: '100%', maxWidth: '100%' }}
-                              onError={e => { e.target.style.display = 'none'; }}
-                            />
-                          </motion.div>
-                        ) : (
-                          <div className="w-full h-64 md:h-[400px] rounded-lg bg-white flex items-center justify-center text-gray-300">
-                            <ImageIcon size={64} />
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-                {/* Navigation & Progress */}
-                <div className="flex items-center justify-between px-8 py-4">
-                  <button
-                    className={`p-2 rounded-full bg-primary text-white ${current === 0 ? 'opacity-40 cursor-not-allowed' : ''}`}
-                    onClick={prevSlide}
-                    disabled={current === 0}
-                  >
-                    <ChevronLeft size={24} />
-                  </button>
-                  <div className="flex-1 mx-6">
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        style={{ width: `${((current + 1) / slides.length) * 100}%` }}
-                        className="h-full bg-gradient-to-l from-primary to-secondary transition-all"
-                      ></div>
-                    </div>
-                    <div className="text-center text-xs text-gray-500 mt-1">
-                      {current + 1} / {slides.length}
-                    </div>
-                  </div>
-                  <button
-                    className={`p-2 rounded-full bg-primary text-white ${current === slides.length - 1 ? 'opacity-40 cursor-not-allowed' : ''}`}
-                    onClick={nextSlide}
-                    disabled={current === slides.length - 1}
-                  >
-                    <ChevronRight size={24} />
-                  </button>
-                </div>
-                {/* Modal */}
-                <AnimatePresence>
-                  {modal && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="fixed inset-0 z-50 flex items-center justify-center modal-blur"
-                      onClick={closeModal}
-                    >
-                      <motion.div
-                        initial={{ scale: 0.9, y: 40 }}
-                        animate={{ scale: 1, y: 0 }}
-                        exit={{ scale: 0.9, y: 40 }}
-                        transition={{ type: "spring", stiffness: 320, damping: 28 }}
-                        className="bg-white glass rounded-lg shadow-xl max-w-lg w-full mx-4 p-6 relative"
-                        onClick={e => e.stopPropagation()}
-                      >
-                        <button
-                          className="absolute left-4 top-4 p-2 rounded-full bg-gray-100 text-gray-600"
-                          onClick={closeModal}
-                        >
-                          <X size={20} />
-                        </button>
-                        <h3 className="text-xl font-bold text-primary mb-3">{modal.title}</h3>
-                        <div className="text-gray-800 rtl">{modal.body}</div>
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            )}
-          </div>
-        );
-      }
 
-      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-    </script>
+                          {/* منطقة الشريحة */}
+                          <div className="flex-1 flex items-center justify-center p-4 relative">
+                              <AnimatePresence mode="wait">
+                                  <motion.div 
+                                      key={slide.id}
+                                      initial={{ opacity: 0, x: 50 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      exit={{ opacity: 0, x: -50 }}
+                                      transition={{ duration: 0.5 }}
+                                      className={`w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row ${!slide.image ? 'md:grid-cols-1' : ''}`}
+                                      style={{ minHeight: '70vh' }}
+                                  >
+                                      {/* النص */}
+                                      <div className={`p-10 flex flex-col justify-center ${slide.image ? 'md:w-1/2' : 'w-full text-center'}`}>
+                                          <div className="mb-6">
+                                              <span className="text-secondary text-4xl">✦</span>
+                                              <h1 className="text-4xl md:text-5xl font-black text-primary mt-2">{slide.title}</h1>
+                                          </div>
+                                          <div className="text-xl md:text-2xl text-gray-600 leading-relaxed whitespace-pre-line mb-8">
+                                              {slide.content}
+                                          </div>
+                                        
+                                          <div className={`mt-auto ${!slide.image ? 'mx-auto' : ''}`}>
+                                              <motion.button 
+                                                  whileHover={{ scale: 1.05 }}
+                                                  whileTap={{ scale: 0.95 }}
+                                                  onClick={() => setShowModal(true)}
+                                                  className="bg-primary text-white px-8 py-3 rounded-full text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252]"
+                                              >
+                                                  <span>مثال عملي</span>
+                                                  <Icons.Left />
+                                              </motion.button>
+                                          </div>
+                                      </div>
+
+                                      {/* الصورة */}
+                                      {slide.image && (
+                                          <div className="md:w-1/2 bg-gray-100 flex items-center justify-center p-4 border-r border-gray-200">
+                                              <img src={slide.image} alt="Visual" className="max-w-full max-h-[500px] object-contain rounded-lg shadow-sm" />
+                                          </div>
+                                      )}
+                                  </motion.div>
+                              </AnimatePresence>
+
+                              {/* أزرار التنقل */}
+                              <button onClick={prevSlide} className="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block"><Icons.Right /></button>
+                              <button onClick={nextSlide} className="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block"><Icons.Left /></button>
+                          </div>
+
+                          {/* شريط التقدم */}
+                          <div className="h-2 bg-gray-200 w-full">
+                              <motion.div 
+                                  className="h-full bg-secondary" 
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${progress}%` }}
+                              />
+                          </div>
+
+                          {/* النافذة المنبثقة (Modal) */}
+                          <AnimatePresence>
+                              {showModal && (
+                                  <div className="fixed inset-0 bg-primary/90 z-[100] flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowModal(false)}>
+                                      <motion.div 
+                                          initial={{ opacity: 0, scale: 0.8, y: 50 }}
+                                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                                          exit={{ opacity: 0, scale: 0.8, y: 50 }}
+                                          className="bg-white w-full max-w-lg rounded-2xl p-8 shadow-2xl relative text-center"
+                                          onClick={(e) => e.stopPropagation()}
+                                      >
+                                          <button onClick={() => setShowModal(false)} className="absolute top-4 left-4 text-gray-400 hover:text-red-500"><Icons.Close /></button>
+                                          <h2 className="text-3xl font-bold text-primary mb-4">{slide.modalTitle}</h2>
+                                          <div className="text-lg text-gray-600 bg-gray-50 p-4 rounded-xl border-r-4 border-secondary">
+                                              {slide.modalContent}
+                                          </div>
+                                      </motion.div>
+                                  </div>
+                              )}
+                          </AnimatePresence>
+                      </div>
+                  );
+              }
+
+              // --- واجهة المحرر (Editor Mode) ---
+              return (
+                  <div className="min-h-screen p-8 max-w-5xl mx-auto">
+                      <header className="flex justify-between items-center mb-8">
+                          <div>
+                              <h1 className="text-3xl font-black text-primary">لوحة التحكم</h1>
+                              <p className="text-gray-500">قم بإعداد الشرائح ثم ابدأ العرض</p>
+                          </div>
+                          <button 
+                              onClick={() => setMode('presentation')} 
+                              className="bg-secondary text-primary font-bold px-6 py-3 rounded-xl shadow-lg hover:brightness-110 flex items-center gap-2"
+                          >
+                              <Icons.Play /> ابدأ العرض
+                          </button>
+                      </header>
+
+                      <div className="space-y-6">
+                          {slides.map((slide, index) => (
+                              <motion.div layout key={slide.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                  <div className="flex justify-between items-center mb-4 border-b pb-2">
+                                      <h3 className="font-bold text-lg text-primary">شريحة {index + 1}</h3>
+                                      <button onClick={() => deleteSlide(slide.id)} className="text-red-400 hover:text-red-600 p-2"><Icons.Trash /></button>
+                                  </div>
+                                
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                      {/* العنوان */}
+                                      <div className="col-span-2">
+                                          <label className="block text-sm font-medium text-gray-700 mb-1">العنوان الرئيسي</label>
+                                          <input 
+                                              type="text" 
+                                              value={slide.title} 
+                                              onChange={(e) => updateSlide(slide.id, 'title', e.target.value)}
+                                              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                                          />
+                                      </div>
+
+                                      {/* المحتوى */}
+                                      <div className="col-span-2">
+                                          <label className="block text-sm font-medium text-gray-700 mb-1">النقاط (محتوى الشريحة)</label>
+                                          <textarea 
+                                              rows="3"
+                                              value={slide.content} 
+                                              onChange={(e) => updateSlide(slide.id, 'content', e.target.value)}
+                                              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                                          ></textarea>
+                                      </div>
+
+                                      {/* رابط الصورة */}
+                                      <div className="col-span-2">
+                                          <label className="block text-sm font-medium text-gray-700 mb-1">رابط الصورة (اتركه فارغاً للنص فقط)</label>
+                                          <input 
+                                              type="text" 
+                                              placeholder="https://..."
+                                              value={slide.image} 
+                                              onChange={(e) => updateSlide(slide.id, 'image', e.target.value)}
+                                              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none text-left"
+                                              dir="ltr"
+                                          />
+                                      </div>
+
+                                      {/* بيانات النافذة المنبثقة */}
+                                      <div className="bg-gray-50 p-4 rounded-xl col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                          <div className="col-span-2 text-xs font-bold text-secondary uppercase tracking-widest">بيانات المثال العملي (النافذة)</div>
+                                          <div>
+                                              <input 
+                                                  type="text" 
+                                                  placeholder="عنوان النافذة"
+                                                  value={slide.modalTitle} 
+                                                  onChange={(e) => updateSlide(slide.id, 'modalTitle', e.target.value)}
+                                                  className="w-full p-2 border rounded-lg"
+                                              />
+                                          </div>
+                                          <div>
+                                              <input 
+                                                  type="text" 
+                                                  placeholder="نص المثال..."
+                                                  value={slide.modalContent} 
+                                                  onChange={(e) => updateSlide(slide.id, 'modalContent', e.target.value)}
+                                                  className="w-full p-2 border rounded-lg"
+                                              />
+                                          </div>
+                                      </div>
+                                  </div>
+                              </motion.div>
+                          ))}
+
+                          <button 
+                              onClick={addNewSlide}
+                              className="w-full py-4 border-2 border-dashed border-gray-300 rounded-2xl text-gray-500 hover:border-primary hover:text-primary transition flex justify-center items-center gap-2"
+                          >
+                              <Icons.Plus /> إضافة شريحة جديدة
+                          </button>
+                      </div>
+                  </div>
+              );
+          }
+
+          const root = ReactDOM.createRoot(document.getElementById('root'));
+          root.render(<App />);
+      </script>
   </body>
   </html>
