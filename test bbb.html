@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عرض تقديمي تفاعلي - كلية الشمال</title>
+    <title>عرض تقديمي - كلية الشمال للتمريض</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -29,12 +29,26 @@
             flex-direction: column;
         }
 
+        /* --- تنسيق الشعار الثابت --- */
+        .fixed-logo {
+            position: fixed;
+            top: 20px;
+            right: 30px; /* مكان الشعار في الزاوية اليمنى العليا */
+            width: 140px; /* حجم الشعار */
+            height: auto;
+            z-index: 500; /* ليظهر فوق كل شيء */
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
+            transition: width 0.3s ease;
+        }
+
+        /* --- الحاوية الرئيسية --- */
         .slider-container {
             position: relative;
             flex-grow: 1;
             width: 100%;
             height: 100%;
             overflow: hidden;
+            padding-top: 60px; /* مساحة فارغة في الأعلى للشعار */
         }
 
         .slide {
@@ -52,54 +66,32 @@
             transform: scale(1); z-index: 10;
         }
 
-        /* --- تحديث هيكل الشريحة ليدعم الصور --- */
+        /* --- تصميم البطاقة --- */
         .slide-content {
             background: var(--white);
-            width: 95%; max-width: 1100px; /* زيادة العرض لاستيعاب الصورة */
+            width: 95%; max-width: 1100px;
             padding: 50px;
             border-radius: 20px;
             box-shadow: var(--shadow);
             border-top: 5px solid var(--primary-color);
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr; /* تقسيم المساحة: نص أكبر قليلاً من الصورة */
+            grid-template-columns: 1.2fr 0.8fr; 
             gap: 40px;
             align-items: center;
+            position: relative;
         }
 
-        /* في حال عدم وجود صورة، يأخذ النص كامل المساحة */
-        .slide-content.full-width {
-            grid-template-columns: 1fr;
-        }
-
-        .text-section {
-            /* منطقة النصوص */
-        }
-
-        .visual-section {
-            /* منطقة الصورة */
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        .slide-content.full-width { grid-template-columns: 1fr; }
 
         .visual-card {
-            width: 100%;
-            height: auto;
-            max-height: 400px;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 2px solid #eee;
+            width: 100%; height: auto; max-height: 400px;
+            border-radius: 15px; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 2px solid #eee;
+            display: flex; justify-content: center; align-items: center;
+            background: #f0f0f0;
         }
-
-        .visual-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* لضمان ملء الصورة للإطار بشكل جميل */
-            display: block;
-        }
+        
+        .visual-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .slide-header {
             display: flex; align-items: center; margin-bottom: 25px;
@@ -111,16 +103,8 @@
         h1 { font-size: 2.2rem; color: var(--primary-color); font-weight: 900; line-height: 1.3; }
 
         ul.points { list-style: none; margin-bottom: 30px; }
-
-        ul.points li {
-            font-size: 1.3rem; margin-bottom: 12px; position: relative;
-            padding-right: 25px; line-height: 1.5;
-        }
-
-        ul.points li::before {
-            content: '✔'; position: absolute; right: 0;
-            color: var(--secondary-color); font-weight: bold;
-        }
+        ul.points li { font-size: 1.3rem; margin-bottom: 12px; position: relative; padding-right: 25px; line-height: 1.5; }
+        ul.points li::before { content: '✔'; position: absolute; right: 0; color: var(--secondary-color); font-weight: bold; }
 
         .btn-example {
             background: var(--primary-color); color: var(--white); border: none;
@@ -161,12 +145,11 @@
 
         /* تجاوب الجوال */
         @media (max-width: 900px) {
+            .fixed-logo { width: 100px; right: 20px; top: 15px; } /* تصغير الشعار للجوال */
+            .slider-container { padding-top: 80px; } /* زيادة المساحة لتجنب تداخل الشعار مع النص */
             .slide-content { 
-                grid-template-columns: 1fr; /* تحويل الشبكة لعمود واحد */
-                padding: 30px 20px; 
-                gap: 20px;
-                overflow-y: auto; /* السماح بالتمرير داخل الكارت إذا طال المحتوى */
-                max-height: 85vh;
+                grid-template-columns: 1fr; padding: 30px 20px; gap: 20px;
+                overflow-y: auto; max-height: 80vh;
             }
             .visual-card { max-height: 250px; margin-top: 10px; }
             h1 { font-size: 1.5rem; }
@@ -176,6 +159,8 @@
     </style>
 </head>
 <body>
+
+    <img src="https://nre-nec.github.io/pictures/logo.png" alt="شعار كلية الشمال" class="fixed-logo">
 
     <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
 
@@ -218,7 +203,7 @@
                 </div>
                 <div class="visual-section">
                     <div class="visual-card">
-                        <img src="https://placehold.co/600x400/5D4068/FFF?text=Chart+Graphic" alt="رسم بياني">
+                        <img src="https://placehold.co/600x400/5D4068/FFF?text=Performance+Chart" alt="رسم بياني">
                     </div>
                 </div>
             </div>
@@ -242,7 +227,7 @@
                 </div>
                  <div class="visual-section">
                     <div class="visual-card">
-                        <img src="https://placehold.co/600x400/C5B358/333?text=Mobile+App+UI" alt="تطبيق الجوال">
+                        <img src="https://placehold.co/600x400/C5B358/333?text=Mobile+App" alt="تطبيق الجوال">
                     </div>
                 </div>
             </div>
