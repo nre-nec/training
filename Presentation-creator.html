@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منشئ العروض التقديمية - كلية الشمال</title>
+    <link rel="icon" href="https://nre-nec.github.io/pictures/logo.png" type="image/png">
     
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -173,12 +174,15 @@
                             <button onClick={nextSlide} className="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block"><Icons.Left /></button>
                         </div>
 
-                        <div className="h-2 bg-gray-200 w-full">
-                            <motion.div 
-                                className="h-full bg-secondary" 
-                                initial={{ width: 0 }}
-                                animate={{ width: `${progress}%` }}
-                            />
+                        <div className="flex items-center justify-center gap-4 py-4 bg-gray-50 border-t">
+                            <span className="text-sm text-gray-600 font-medium">الشريحة {currentSlideIndex + 1} من {slides.length}</span>
+                            <div className="h-2 bg-gray-200 flex-1">
+                                <motion.div 
+                                    className="h-full bg-secondary" 
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${progress}%` }}
+                                />
+                            </div>
                         </div>
 
                         <AnimatePresence>
@@ -193,7 +197,7 @@
                                     >
                                         <button onClick={() => setShowModal(false)} className="absolute top-4 left-4 text-gray-400 hover:text-red-500"><Icons.Close /></button>
                                         <h2 className="text-3xl font-bold text-primary mb-4">{slide.modalTitle}</h2>
-                                        <div className="text-lg text-gray-600 bg-gray-50 p-4 rounded-xl border-r-4 border-secondary">
+                                        <div className="text-lg text-gray-600 bg-gray-50 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto">
                                             {slide.modalContent}
                                         </div>
                                     </motion.div>
