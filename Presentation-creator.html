@@ -181,7 +181,8 @@
                     image: "https://nre-nec.github.io/pictures/logo.png",
                     modalTitle: "تفاصيل الرؤية",
                     modalContent: "تهدف كليتنا إلى أن تكون رائدة في تعليم التمريض، من خلال توفير بيئة تعليمية محفزة تدعم البحث العلمي والابتكار.",
-                    slideIcon: "star"
+                    slideIcon: "star",
+                    modalIcon: "award"
                 }
             ]);
             const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -202,7 +203,8 @@
                     image: "",
                     modalTitle: "مثال إضافي",
                     modalContent: "تفاصيل إضافية لهذا المثال تظهر هنا...",
-                    slideIcon: "lightbulb"
+                    slideIcon: "lightbulb",
+                    modalIcon: "zap"
                 }]);
             };
 
@@ -293,12 +295,30 @@
         let currentIndex = 0;
         let startX = 0;
         
+        const heroIcons = {
+            'star': '<svg width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>',
+            'trending': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 17"/><polyline points="17 6 23 6 23 12"/></svg>',
+            'users': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+            'award': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8 14 12 17 16 14"/><line x1="12" y1="17" x2="12" y2="23"/><line x1="9" y1="20" x2="15" y2="20"/></svg>',
+            'zap': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+            'target': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/></svg>',
+            'rocket': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5-1.5-2-5-2-5s3.5-.5 5-2l.5.5-.5.5c1.5 1.5 1 4 .5 5.5"/><path d="M12 6v6m6-6v6"/><circle cx="12" cy="12" r="10"/></svg>',
+            'lightbulb': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6m-9-2h12a2 2 0 0 0 1.697-3.153l-.653-1.306a2 2 0 0 1-.221-1.126V7a4 4 0 0 0-8 0v3.415a2 2 0 0 1-.221 1.126l-.653 1.306A2 2 0 0 0 6 16z"/></svg>',
+            'check': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+            'heart': '<svg width="56" height="56" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+            'graduation': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 19V5c0-1-1-2-2-2H5c-1 0-2 1-2 2v14m20 0l-9-7-9 7m14-3v5m-8 0v5"/></svg>',
+            'book': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+            'briefcase': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>',
+            'chart': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>'
+        };
+        
         function renderSlide(index) {
             const slide = slidesData[index];
             const slideHTML = \`
                 <div class="w-full max-w-6xl glass-card rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row relative z-10 mx-auto" style="max-height: 100%;">
                     <div class="\${slide.image ? 'md:w-1/2' : 'w-full text-center'} p-5 md:p-10 flex flex-col justify-center overflow-y-auto no-scrollbar">
                         <div class="mb-4 md:mb-6">
+                            <div class="text-4xl md:text-6xl mb-2 md:mb-3 text-secondary" id="slideIconContainer"></div>
                             <h1 class="text-xl sm:text-2xl md:text-5xl font-black text-primary leading-tight">\${slide.title}</h1>
                         </div>
                         <div class="text-base sm:text-lg md:text-2xl text-gray-700 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-medium">
@@ -319,11 +339,19 @@
                 <div id="modalOverlay" class="fixed inset-0 bg-primary/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md hidden" onclick="closeModal()">
                     <div class="bg-white/95 w-full max-w-lg rounded-2xl p-6 md:p-8 shadow-2xl relative text-center" onclick="event.stopPropagation()">
                         <button onclick="closeModal()" class="absolute top-4 left-4 text-gray-400">✕</button>
+                        <div class="text-secondary mb-3 flex justify-center" id="modalIconContainer"></div>
                         <h2 class="text-xl md:text-3xl font-bold text-primary mb-4">\${slide.modalTitle}</h2>
                         <div class="text-sm md:text-lg text-gray-600 bg-gray-50/50 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto font-medium">\${slide.modalContent}</div>
                     </div>
                 </div>\`;
             document.getElementById('slideContainer').innerHTML = slideHTML;
+            
+            // Add Icons logic to standalone
+            const slideIcon = heroIcons[slide.slideIcon] || '<span class="text-4xl text-secondary">✦</span>';
+            const modalIcon = heroIcons[slide.modalIcon] || '<span class="text-4xl text-secondary">✦</span>';
+            document.getElementById('slideIconContainer').innerHTML = slideIcon;
+            document.getElementById('modalIconContainer').innerHTML = modalIcon;
+
             document.getElementById('slideCounter').textContent = 'الشريحة ' + (index + 1) + ' من ' + slidesData.length;
             document.getElementById('progressFill').style.width = ((index + 1) / slidesData.length * 100) + '%';
         }
@@ -447,6 +475,12 @@
                                 <div className="fixed inset-0 bg-primary/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md" onClick={() => setShowModal(false)}>
                                     <motion.div initial={{ opacity: 0, scale: 0.8, y: 50 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.8, y: 50 }} className="bg-white/95 w-full max-w-lg rounded-2xl p-6 md:p-8 shadow-2xl relative text-center" onClick={(e) => e.stopPropagation()}>
                                         <button onClick={() => setShowModal(false)} className="absolute top-4 left-4 text-gray-400 hover:text-red-500"><Icons.Close /></button>
+                                        <div className="text-secondary mb-3 flex justify-center">
+                                            {slide.modalIcon && Icons[HeroiconsList.find(i => i.id === slide.modalIcon)?.icon]
+                                                ? React.createElement(Icons[HeroiconsList.find(i => i.id === slide.modalIcon)?.icon], { size: 48 })
+                                                : <Icons.Help size={48} />
+                                            }
+                                        </div>
                                         <h2 className="text-xl md:text-3xl font-bold text-primary mb-4">{slide.modalTitle}</h2>
                                         <div className="text-sm md:text-lg text-gray-600 bg-gray-50/30 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto font-medium">{slide.modalContent}</div>
                                     </motion.div>
@@ -499,6 +533,14 @@
                                         <div className="col-span-2 text-xs font-bold text-secondary uppercase tracking-widest">بيانات المثال العملي (النافذة)</div>
                                         <input type="text" placeholder="عنوان النافذة" value={slide.modalTitle} onChange={(e) => updateSlide(slide.id, 'modalTitle', e.target.value)} className="w-full p-2 border rounded-lg" />
                                         <input type="text" placeholder="نص المثال..." value={slide.modalContent} onChange={(e) => updateSlide(slide.id, 'modalContent', e.target.value)} className="w-full p-2 border rounded-lg" />
+                                        <div className="col-span-2">
+                                            <label className="block text-xs font-bold text-gray-400 mb-2 uppercase">أيقونة النافذة</label>
+                                            <div className="flex flex-wrap gap-1">
+                                                {HeroiconsList.map((iconItem) => (
+                                                    <button key={iconItem.id} onClick={() => updateSlide(slide.id, 'modalIcon', iconItem.id)} className={`p-1.5 rounded-md transition border ${slide.modalIcon === iconItem.id ? 'bg-secondary text-primary border-secondary' : 'bg-white text-gray-400 border-gray-100 hover:border-secondary'}`} title={iconItem.name}>{React.createElement(Icons[iconItem.icon], { size: 14 })}</button>
+                                                ))}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </motion.div>
@@ -524,7 +566,7 @@
                             </div>
                         )}
                     </AnimatePresence>
-                </div>
+                </div >
             );
         }
 
