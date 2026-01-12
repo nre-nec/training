@@ -225,11 +225,11 @@
     <div class="orb orb-3"></div>
 
     <div id="root" class="relative w-full h-screen overflow-hidden flex flex-col">
-        <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" class="fixed top-5 left-5 w-24 z-50 drop-shadow-md" />
-        <div class="flex-1 flex items-center justify-center p-4 relative" id="slideContainer"></div>
-        <div class="flex items-center justify-center gap-4 py-4 bg-white/50 backdrop-blur-md border-t">
+        <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" class="fixed top-3 left-3 w-16 md:top-5 md:left-5 md:w-24 z-50 drop-shadow-md" />
+        <div class="flex-1 flex items-center justify-center p-2 md:p-4 relative" id="slideContainer"></div>
+        <div class="flex items-center justify-center gap-4 py-3 md:py-4 bg-white/50 backdrop-blur-md border-t">
             <span id="slideCounter" class="text-sm text-gray-600 font-medium"></span>
-            <div class="h-2 bg-gray-200/50 flex-1 rounded-full"><div class="h-full bg-secondary rounded-full" id="progressFill" style="width: 0%"></div></div>
+            <div class="h-1.5 md:h-2 bg-gray-200/50 flex-1 rounded-full"><div class="h-full bg-secondary rounded-full" id="progressFill" style="width: 0%"></div></div>
         </div>
     </div>
     <script>
@@ -261,23 +261,32 @@
             const slide = slidesData[index];
             const icon = heroIcons[slide.slideIcon] || '<span class="text-6xl text-secondary">✦</span>';
             const slideHTML = \`
-                <div class="w-full max-w-6xl glass-card rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row relative z-10" style="min-height: 70vh">
-                    <div class="\${slide.image ? 'md:w-1/2' : 'w-full text-center'} p-10 flex flex-col justify-center">
-                        <div class="mb-6"><div class="text-6xl mb-3 text-secondary">\${icon}</div><h1 class="text-4xl md:text-5xl font-black text-primary">\${slide.title}</h1></div>
-                        <div class="text-xl md:text-2xl text-gray-600 leading-relaxed whitespace-pre-line mb-8">\${slide.content}</div>
-                        <div class="\${!slide.image ? 'mx-auto' : ''} mt-auto">
-                            <button onclick="showModal()" class="bg-primary text-white px-8 py-3 rounded-full text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252] transition-transform active:scale-95"><span>مثال عملي</span>\${Icons.Left}</button>
+                <div class="w-full max-w-6xl glass-card rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row relative z-10 mx-auto" style="min-height: 60vh; max-height: 85vh;">
+                    <div class="\${slide.image ? 'md:w-1/2' : 'w-full text-center'} p-4 md:p-10 flex flex-col justify-center overflow-y-auto no-scrollbar">
+                        <div class="mb-4 md:mb-6">
+                            <div class="text-4xl md:text-6xl mb-2 md:mb-3 text-secondary">\${icon}</div>
+                            <h1 class="text-2xl md:text-5xl font-black text-primary leading-tight">\${slide.title}</h1>
+                        </div>
+                        <div class="text-lg md:text-2xl text-gray-600 leading-relaxed whitespace-pre-line mb-6 md:mb-8">
+                            \${slide.content}
+                        </div>
+                        <div class="\${!slide.image ? 'mx-auto' : ''} mt-auto pb-2">
+                            <button onclick="showModal()" class="bg-primary text-white px-6 md:px-8 py-2 md:py-3 rounded-full text-base md:text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252] transition-transform active:scale-95"><span>مثال عملي</span>\${Icons.Left}</button>
                         </div>
                     </div>
-                    \${slide.image ? \`<div class="md:w-1/2 bg-gray-50/50 flex items-center justify-center p-4 border-r border-gray-200/50"><img src="\${slide.image}" class="max-w-full max-h-[500px] object-contain rounded-lg shadow-sm" /></div>\` : ''}
+                    \${slide.image ? \`
+                        <div class="md:w-1/2 bg-gray-50/50 flex items-center justify-center p-4 border-t md:border-t-0 md:border-r border-gray-200/50">
+                            <img src="\${slide.image}" class="max-w-full max-h-[250px] md:max-h-[500px] object-contain rounded-lg shadow-sm" />
+                        </div>
+                    \` : ''}
                 </div>
                 <button onclick="prevSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block z-20">\${Icons.Right}</button>
                 <button onclick="nextSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block z-20">\${Icons.Left}</button>
                 <div id="modalOverlay" class="fixed inset-0 bg-primary/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md hidden" onclick="closeModal()">
-                    <div class="bg-white/95 w-full max-w-lg rounded-2xl p-8 shadow-2xl relative text-center" onclick="event.stopPropagation()">
+                    <div class="bg-white/95 w-full max-w-lg rounded-2xl p-6 md:p-8 shadow-2xl relative text-center" onclick="event.stopPropagation()">
                         <button onclick="closeModal()" class="absolute top-4 left-4 text-gray-400 hover:text-red-500">\${Icons.Close}</button>
-                        <h2 class="text-3xl font-bold text-primary mb-4">\${slide.modalTitle}</h2>
-                        <div class="text-lg text-gray-600 bg-gray-50/50 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto">\${slide.modalContent}</div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-primary mb-4">\${slide.modalTitle}</h2>
+                        <div class="text-base md:text-lg text-gray-600 bg-gray-50/50 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto">\${slide.modalContent}</div>
                     </div>
                 </div>\`;
             document.getElementById('slideContainer').innerHTML = slideHTML;
@@ -319,10 +328,10 @@
                     <div className="relative w-full h-screen overflow-hidden bg-white flex flex-col">
                         <BackgroundOrbs />
 
-                        <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" className="fixed top-5 left-5 w-24 z-50 drop-shadow-md" />
-                        <button onClick={() => setMode('editor')} className="fixed top-5 right-5 z-50 bg-gray-200/50 backdrop-blur-md p-2 rounded-full hover:bg-gray-300 transition-colors"><Icons.Edit /></button>
+                        <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" className="fixed top-3 left-3 w-16 md:top-5 md:left-5 md:w-24 z-50 drop-shadow-md" />
+                        <button onClick={() => setMode('editor')} className="fixed top-3 right-3 md:top-5 md:right-5 z-50 bg-gray-200/50 backdrop-blur-md p-2 rounded-full hover:bg-gray-300 transition-colors"><Icons.Edit /></button>
 
-                        <div className="flex-1 flex items-center justify-center p-4 relative">
+                        <div className="flex-1 flex items-center justify-center p-2 md:p-4 relative">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={slide.id}
@@ -336,29 +345,29 @@
                                     animate={{ opacity: 1, x: 0, scale: 1 }}
                                     exit={{ opacity: 0, x: -50, scale: 0.95 }}
                                     transition={{ duration: 0.5 }}
-                                    className="w-full max-w-6xl glass-bg rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row cursor-grab active:cursor-grabbing relative z-10"
-                                    style={{ minHeight: '70vh' }}
+                                    className="w-full max-w-6xl glass-bg rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row cursor-grab active:cursor-grabbing relative z-10 mx-auto"
+                                    style={{ minHeight: '60vh', maxHeight: '85vh' }}
                                 >
-                                    <div className={`p-10 flex flex-col justify-center ${slide.image ? 'md:w-1/2' : 'w-full text-center'}`}>
-                                        <div className="mb-6">
-                                            <div className="text-6xl mb-3 text-secondary">
+                                    <div className={`p-6 md:p-10 flex flex-col justify-center overflow-y-auto no-scrollbar ${slide.image ? 'md:w-1/2' : 'w-full text-center'}`}>
+                                        <div className="mb-4 md:mb-6">
+                                            <div className="text-4xl md:text-6xl mb-2 md:mb-3 text-secondary">
                                                 {slide.slideIcon && Icons[HeroiconsList.find(i => i.id === slide.slideIcon)?.icon]
                                                     ? React.createElement(Icons[HeroiconsList.find(i => i.id === slide.slideIcon)?.icon], { size: 56 })
                                                     : <span>✦</span>
                                                 }
                                             </div>
-                                            <h1 className="text-4xl md:text-5xl font-black text-primary">{slide.title}</h1>
+                                            <h1 className="text-2xl md:text-5xl font-black text-primary leading-tight">{slide.title}</h1>
                                         </div>
-                                        <div className="text-xl md:text-2xl text-gray-600 leading-relaxed whitespace-pre-line mb-8">{slide.content}</div>
-                                        <div className={`mt-auto ${!slide.image ? 'mx-auto' : ''}`}>
-                                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowModal(true)} className="bg-primary text-white px-8 py-3 rounded-full text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252] transition-all">
+                                        <div className="text-lg md:text-2xl text-gray-600 leading-relaxed whitespace-pre-line mb-6 md:mb-8">{slide.content}</div>
+                                        <div className={`mt-auto pb-2 ${!slide.image ? 'mx-auto' : ''}`}>
+                                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowModal(true)} className="bg-primary text-white px-6 md:px-8 py-2 md:py-3 rounded-full text-base md:text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252] transition-all">
                                                 <span>مثال عملي</span><Icons.Left />
                                             </motion.button>
                                         </div>
                                     </div>
                                     {slide.image && (
-                                        <div className="md:w-1/2 bg-gray-50/50 flex items-center justify-center p-4 border-r border-gray-200">
-                                            <img src={slide.image} alt="Visual" className="max-w-full max-h-[500px] object-contain rounded-lg shadow-sm" />
+                                        <div className="md:w-1/2 bg-gray-50/50 flex items-center justify-center p-4 border-t md:border-t-0 md:border-r border-gray-200">
+                                            <img src={slide.image} alt="Visual" className="max-w-full max-h-[250px] md:max-h-[500px] object-contain rounded-lg shadow-sm" />
                                         </div>
                                     )}
                                 </motion.div>
