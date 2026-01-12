@@ -50,11 +50,37 @@
             scrollbar-width: none;
         }
 
-        /* تأثير الخلفية المتحركة */
         .glass-bg {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.5;
+            animation: move 20s infinite linear;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(100px, 50px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-50px, 100px) scale(0.9);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
         }
     </style>
 </head>
@@ -76,21 +102,20 @@
             Left: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>,
             Download: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>,
             Help: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>,
-            Image: () => <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>,
-            Star: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>,
-            TrendingUp: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 17" /><polyline points="17 6 23 6 23 12" /></svg>,
-            Users: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>,
-            Award: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7" /><polyline points="8 14 12 17 16 14" /><line x1="12" y1="17" x2="12" y2="23" /><line x1="9" y1="20" x2="15" y2="20" /></svg>,
-            Zap: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>,
-            Target: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="9" /></svg>,
-            Rocket: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5-1.5-2-5-2-5s3.5-.5 5-2l.5.5-.5.5c1.5 1.5 1 4 .5 5.5" /><path d="M12 6v6m6-6v6" /><circle cx="12" cy="12" r="10" /></svg>,
-            Lightbulb: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6m-9-2h12a2 2 0 0 0 1.697-3.153l-.653-1.306a2 2 0 0 1-.221-1.126V7a4 4 0 0 0-8 0v3.415a2 2 0 0 1-.221 1.126l-.653 1.306A2 2 0 0 0 6 16z" /></svg>,
-            CheckCircle: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>,
-            Heart: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>,
-            GraduationCap: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 19V5c0-1-1-2-2-2H5c-1 0-2 1-2 2v14m20 0l-9-7-9 7m14-3v5m-8 0v5" /></svg>,
-            BookOpen: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>,
-            Briefcase: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></svg>,
-            BarChart3: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 24} height={props?.size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="20" x2="12" y2="10" /><line x1="18" y1="20" x2="18" y2="4" /><line x1="6" y1="20" x2="6" y2="16" /></svg>
+            Star: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>,
+            TrendingUp: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 17" /><polyline points="17 6 23 6 23 12" /></svg>,
+            Users: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>,
+            Award: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7" /><polyline points="8 14 12 17 16 14" /><line x1="12" y1="17" x2="12" y2="23" /><line x1="9" y1="20" x2="15" y2="20" /></svg>,
+            Zap: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>,
+            Target: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="9" /></svg>,
+            Rocket: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5-1.5-2-5-2-5s3.5-.5 5-2l.5.5-.5.5c1.5 1.5 1 4 .5 5.5" /><path d="M12 6v6m6-6v6" /><circle cx="12" cy="12" r="10" /></svg>,
+            Lightbulb: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6m-9-2h12a2 2 0 0 0 1.697-3.153l-.653-1.306a2 2 0 0 1-.221-1.126V7a4 4 0 0 0-8 0v3.415a2 2 0 0 1-.221 1.126l-.653 1.306A2 2 0 0 0 6 16z" /></svg>,
+            CheckCircle: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>,
+            Heart: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>,
+            GraduationCap: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 19V5c0-1-1-2-2-2H5c-1 0-2 1-2 2v14m20 0l-9-7-9 7m14-3v5m-8 0v5" /></svg>,
+            BookOpen: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>,
+            Briefcase: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></svg>,
+            BarChart3: (props) => <svg xmlns="http://www.w3.org/2000/svg" width={props?.size || 56} height={props?.size || 56} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="20" x2="12" y2="10" /><line x1="18" y1="20" x2="18" y2="4" /><line x1="6" y1="20" x2="6" y2="16" /></svg>
         };
 
         const HeroiconsList = [
@@ -115,30 +140,20 @@
             { id: 2, title: "الإحصائيات والأرقام", content: "• نسبة رضا الطلاب: 98%\n• عدد الشراكات: 15 مستشفى\n• الاعتمادات: 3 اعتمادات دولية", image: "https://placehold.co/600x400/5D4068/FFF?text=Chart", slideIcon: "chart", modalTitle: "تفاصيل الرسم البياني", modalContent: "يوضح الرسم البياني النمو المتصاعد في أعداد المقبولين." }
         ];
 
-        // مكون الكرات الضوئية المتحركة في الخلفية
         const BackgroundOrbs = () => (
             <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-gray-50">
                 <motion.div
-                    animate={{
-                        x: [0, 100, -50, 0],
-                        y: [0, 50, 100, 0],
-                    }}
+                    animate={{ x: [0, 100, -50, 0], y: [0, 50, 100, 0] }}
                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     className="absolute -top-20 -right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
                 />
                 <motion.div
-                    animate={{
-                        x: [0, -100, 50, 0],
-                        y: [0, 100, -50, 0],
-                    }}
+                    animate={{ x: [0, -100, 50, 0], y: [0, 100, -50, 0] }}
                     transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
                     className="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary/15 rounded-full blur-3xl"
                 />
                 <motion.div
-                    animate={{
-                        scale: [1, 1.2, 0.8, 1],
-                        opacity: [0.3, 0.5, 0.3],
-                    }}
+                    animate={{ scale: [1, 1.2, 0.8, 1], opacity: [0.3, 0.5, 0.3] }}
                     transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
                     className="absolute top-1/2 left-1/3 w-64 h-64 bg-primary/5 rounded-full blur-2xl"
                 />
@@ -217,23 +232,38 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-
-    <div id="root" class="relative w-full h-screen overflow-hidden flex flex-col">
-        <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" class="fixed top-3 left-3 w-16 md:top-5 md:left-5 md:w-24 z-50 drop-shadow-md" />
-        <div class="flex-1 flex items-center justify-center p-2 md:p-4 relative" id="slideContainer"></div>
-        <div class="flex items-center justify-center gap-4 py-3 md:py-4 bg-white/50 backdrop-blur-md border-t">
-            <span id="slideCounter" class="text-sm text-gray-600 font-medium"></span>
-            <div class="h-1.5 md:h-2 bg-gray-200/50 flex-1 rounded-full"><div class="h-full bg-secondary rounded-full" id="progressFill" style="width: 0%"></div></div>
+<body class="bg-gray-50">
+    <div id="root" class="relative w-full h-screen h-[100svh] overflow-hidden flex flex-col bg-white">
+        <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
         </div>
+
+        <!-- Header -->
+        <header class="flex items-center justify-between px-4 py-3 z-50 bg-white/30 backdrop-blur-md border-b border-white/20">
+            <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" class="w-16 md:w-20 drop-shadow-sm" />
+            <div class="text-primary font-bold hidden md:block text-lg">كلية الشمال للتمريض</div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex items-center justify-center p-2 md:p-6 overflow-hidden relative" id="slideContainer"></main>
+
+        <!-- Footer -->
+        <footer class="flex items-center justify-center gap-4 px-4 py-3 bg-white/50 backdrop-blur-md border-t border-white/20 z-50">
+            <span id="slideCounter" class="text-xs md:text-sm text-gray-600 font-bold whitespace-nowrap"></span>
+            <div class="h-2 bg-gray-200/50 flex-1 rounded-full overflow-hidden">
+                <div class="h-full bg-secondary transition-all duration-500 ease-out" id="progressFill" style="width: 0%"></div>
+            </div>
+        </footer>
     </div>
+
     <script>
-        const slidesData = ${JSON.stringify(slides)};
+        const slidesData = \${JSON.stringify(slides)};
         let currentIndex = 0;
         let startX = 0;
         const Icons = {
@@ -257,56 +287,67 @@
             'briefcase': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>',
             'chart': '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>'
         };
+
         function renderSlide(index) {
             const slide = slidesData[index];
             const icon = heroIcons[slide.slideIcon] || '<span class="text-6xl text-secondary">✦</span>';
             const slideHTML = \`
-                <div class="w-full max-w-6xl glass-card rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row relative z-10 mx-auto" style="min-height: 60vh; max-height: 85vh;">
-                    <div class="\${slide.image ? 'md:w-1/2' : 'w-full text-center'} p-4 md:p-10 flex flex-col justify-center overflow-y-auto no-scrollbar">
+                <div class="w-full max-w-6xl glass-card rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row relative z-10 mx-auto transition-all" style="max-height: 100%;">
+                    <div class="\${slide.image ? 'md:w-1/2' : 'w-full text-center'} p-5 md:p-10 flex flex-col justify-center overflow-y-auto no-scrollbar">
                         <div class="mb-4 md:mb-6">
                             <div class="text-4xl md:text-6xl mb-2 md:mb-3 text-secondary">\${icon}</div>
-                            <h1 class="text-2xl md:text-5xl font-black text-primary leading-tight">\${slide.title}</h1>
+                            <h1 class="text-xl sm:text-2xl md:text-5xl font-black text-primary leading-tight">\${slide.title}</h1>
                         </div>
-                        <div class="text-lg md:text-2xl text-gray-600 leading-relaxed whitespace-pre-line mb-6 md:mb-8">
+                        <div class="text-base sm:text-lg md:text-2xl text-gray-700 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-medium">
                             \${slide.content}
                         </div>
                         <div class="\${!slide.image ? 'mx-auto' : ''} mt-auto pb-2">
-                            <button onclick="showModal()" class="bg-primary text-white px-6 md:px-8 py-2 md:py-3 rounded-full text-base md:text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252] transition-transform active:scale-95"><span>مثال عملي</span>\${Icons.Left}</button>
+                            <button onclick="showModal()" class="bg-primary text-white px-6 md:px-8 py-2 md:py-3 rounded-full text-sm md:text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252] transition-transform active:scale-95 font-bold"><span>مثال عملي</span>\${Icons.Left}</button>
                         </div>
                     </div>
                     \${slide.image ? \`
                         <div class="md:w-1/2 bg-gray-50/50 flex items-center justify-center p-4 border-t md:border-t-0 md:border-r border-gray-200/50">
-                            <img src="\${slide.image}" class="max-w-full max-h-[250px] md:max-h-[500px] object-contain rounded-lg shadow-sm" />
+                            <img src="\${slide.image}" class="max-w-full max-h-[150px] sm:max-h-[250px] md:max-h-[500px] object-contain rounded-lg shadow-sm" />
                         </div>
                     \` : ''}
                 </div>
+                <!-- Navigation Buttons (Desktop Only) -->
                 <button onclick="prevSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block z-20">\${Icons.Right}</button>
                 <button onclick="nextSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition hidden md:block z-20">\${Icons.Left}</button>
+                <!-- Modal Overlay -->
                 <div id="modalOverlay" class="fixed inset-0 bg-primary/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md hidden" onclick="closeModal()">
                     <div class="bg-white/95 w-full max-w-lg rounded-2xl p-6 md:p-8 shadow-2xl relative text-center" onclick="event.stopPropagation()">
                         <button onclick="closeModal()" class="absolute top-4 left-4 text-gray-400 hover:text-red-500">\${Icons.Close}</button>
-                        <h2 class="text-2xl md:text-3xl font-bold text-primary mb-4">\${slide.modalTitle}</h2>
-                        <div class="text-base md:text-lg text-gray-600 bg-gray-50/50 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto">\${slide.modalContent}</div>
+                        <h2 class="text-xl md:text-3xl font-bold text-primary mb-4">\${slide.modalTitle}</h2>
+                        <div class="text-sm md:text-lg text-gray-600 bg-gray-50/50 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto font-medium">\${slide.modalContent}</div>
                     </div>
                 </div>\`;
             document.getElementById('slideContainer').innerHTML = slideHTML;
             document.getElementById('slideCounter').textContent = \`الشريحة \${index + 1} من \${slidesData.length}\`;
             document.getElementById('progressFill').style.width = ((index + 1) / slidesData.length * 100) + '%';
         }
+
         function nextSlide() { currentIndex = (currentIndex + 1) % slidesData.length; renderSlide(currentIndex); }
         function prevSlide() { currentIndex = (currentIndex - 1 + slidesData.length) % slidesData.length; renderSlide(currentIndex); }
         function showModal() { document.getElementById('modalOverlay').classList.remove('hidden'); }
         function closeModal() { document.getElementById('modalOverlay').classList.add('hidden'); }
-        document.addEventListener('keydown', e => { if(e.key==='ArrowLeft') nextSlide(); if(e.key==='ArrowRight') prevSlide(); if(e.key==='Escape') closeModal(); });
+
+        document.addEventListener('keydown', e => {
+            if(e.key==='ArrowLeft') nextSlide();
+            if(e.key==='ArrowRight') prevSlide();
+            if(e.key==='Escape') closeModal();
+        });
+
         document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
         document.addEventListener('touchend', e => {
             const diff = startX - e.changedTouches[0].clientX;
             if (Math.abs(diff) > 50) diff > 0 ? nextSlide() : prevSlide();
         });
+
         renderSlide(0);
     <\/script>
 </body>
-</html>`;
+</html>\`;
             };
 
             useEffect(() => {
@@ -325,13 +366,22 @@
                 const slide = slides[currentSlideIndex];
                 const progress = ((currentSlideIndex + 1) / slides.length) * 100;
                 return (
-                    <div className="relative w-full h-screen overflow-hidden bg-white flex flex-col">
+                    <div className="relative w-full h-screen h-[100svh] overflow-hidden bg-white flex flex-col">
                         <BackgroundOrbs />
 
-                        <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" className="fixed top-3 left-3 w-16 md:top-5 md:left-5 md:w-24 z-50 drop-shadow-md" />
-                        <button onClick={() => setMode('editor')} className="fixed top-3 right-3 md:top-5 md:right-5 z-50 bg-gray-200/50 backdrop-blur-md p-2 rounded-full hover:bg-gray-300 transition-colors"><Icons.Edit /></button>
+                        {/* Top Header */}
+                        <header className="flex items-center justify-between px-4 py-3 z-50 bg-white/30 backdrop-blur-md border-b border-white/20">
+                            <img src="https://nre-nec.github.io/pictures/logo.png" alt="Logo" className="w-16 md:w-20 drop-shadow-sm" />
+                            <div className="flex gap-2">
+                                <span className="text-primary font-bold hidden md:block self-center ml-4">كلية الشمال للتمريض</span>
+                                <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setMode('editor')} className="bg-white/50 backdrop-blur-md p-2 rounded-full hover:bg-white transition-colors shadow-sm">
+                                    <Icons.Edit />
+                                </motion.button>
+                            </div>
+                        </header>
 
-                        <div className="flex-1 flex items-center justify-center p-2 md:p-4 relative">
+                        {/* Main Slide Area */}
+                        <main className="flex-1 flex items-center justify-center p-2 md:p-6 overflow-hidden relative">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={slide.id}
@@ -345,10 +395,10 @@
                                     animate={{ opacity: 1, x: 0, scale: 1 }}
                                     exit={{ opacity: 0, x: -50, scale: 0.95 }}
                                     transition={{ duration: 0.5 }}
-                                    className="w-full max-w-6xl glass-bg rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row cursor-grab active:cursor-grabbing relative z-10 mx-auto"
-                                    style={{ minHeight: '60vh', maxHeight: '85vh' }}
+                                    className="w-full max-w-6xl glass-bg rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row cursor-grab active:cursor-grabbing relative z-10 mx-auto transition-all"
+                                    style={{ maxHeight: '100%' }}
                                 >
-                                    <div className={`p-6 md:p-10 flex flex-col justify-center overflow-y-auto no-scrollbar ${slide.image ? 'md:w-1/2' : 'w-full text-center'}`}>
+                                    <div className={`p - 5 md: p - 10 flex flex - col justify - center overflow - y - auto no - scrollbar ${ slide.image ? 'md:w-1/2' : 'w-full text-center' } `}>
                                         <div className="mb-4 md:mb-6">
                                             <div className="text-4xl md:text-6xl mb-2 md:mb-3 text-secondary">
                                                 {slide.slideIcon && Icons[HeroiconsList.find(i => i.id === slide.slideIcon)?.icon]
@@ -356,41 +406,44 @@
                                                     : <span>✦</span>
                                                 }
                                             </div>
-                                            <h1 className="text-2xl md:text-5xl font-black text-primary leading-tight">{slide.title}</h1>
+                                            <h1 className="text-xl sm:text-2xl md:text-5xl font-black text-primary leading-tight">{slide.title}</h1>
                                         </div>
-                                        <div className="text-lg md:text-2xl text-gray-600 leading-relaxed whitespace-pre-line mb-6 md:mb-8">{slide.content}</div>
-                                        <div className={`mt-auto pb-2 ${!slide.image ? 'mx-auto' : ''}`}>
-                                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowModal(true)} className="bg-primary text-white px-6 md:px-8 py-2 md:py-3 rounded-full text-base md:text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252] transition-all">
+                                        <div className="text-base sm:text-lg md:text-2xl text-gray-700 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-medium">{slide.content}</div>
+                                        <div className={`mt - auto pb - 2 ${ !slide.image ? 'mx-auto' : '' } `}>
+                                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setShowModal(true)} className="bg-primary text-white px-6 md:px-8 py-2 md:py-3 rounded-full text-sm md:text-lg shadow-lg flex items-center gap-2 hover:bg-[#4a3252] transition-all font-bold">
                                                 <span>مثال عملي</span><Icons.Left />
                                             </motion.button>
                                         </div>
                                     </div>
                                     {slide.image && (
                                         <div className="md:w-1/2 bg-gray-50/50 flex items-center justify-center p-4 border-t md:border-t-0 md:border-r border-gray-200">
-                                            <img src={slide.image} alt="Visual" className="max-w-full max-h-[250px] md:max-h-[500px] object-contain rounded-lg shadow-sm" />
+                                            <img src={slide.image} alt="Visual" className="max-w-full max-h-[150px] sm:max-h-[250px] md:max-h-[500px] object-contain rounded-lg shadow-sm" />
                                         </div>
                                     )}
                                 </motion.div>
                             </AnimatePresence>
 
+                            {/* Desktop Nav Buttons */}
                             <button onClick={prevSlide} className="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all hidden md:block z-20"><Icons.Right /></button>
                             <button onClick={nextSlide} className="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all hidden md:block z-20"><Icons.Left /></button>
-                        </div>
+                        </main>
 
-                        <div className="flex items-center justify-center gap-4 py-4 bg-white/50 backdrop-blur-md border-t relative z-20">
-                            <span className="text-sm text-gray-600 font-medium">الشريحة {currentSlideIndex + 1} من {slides.length}</span>
+                        {/* Bottom Footer */}
+                        <footer className="flex items-center justify-center gap-4 px-4 py-3 bg-white/50 backdrop-blur-md border-t border-white/20 relative z-20">
+                            <span className="text-xs md:text-sm text-gray-600 font-bold whitespace-nowrap">الشريحة {currentSlideIndex + 1} من {slides.length}</span>
                             <div className="h-2 bg-gray-200/50 flex-1 rounded-full overflow-hidden">
-                                <motion.div className="h-full bg-secondary" initial={{ width: 0 }} animate={{ width: `${progress}%` }} />
+                                <motion.div className="h-full bg-secondary" initial={{ width: 0 }} animate={{ width: `${ progress }% ` }} transition={{ duration: 0.5 }} />
                             </div>
-                        </div>
+                        </footer>
 
+                        {/* Modal */}
                         <AnimatePresence>
                             {showModal && (
                                 <div className="fixed inset-0 bg-primary/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md" onClick={() => setShowModal(false)}>
-                                    <motion.div initial={{ opacity: 0, scale: 0.8, y: 50 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.8, y: 50 }} className="bg-white/95 w-full max-w-lg rounded-2xl p-8 shadow-2xl relative text-center" onClick={(e) => e.stopPropagation()}>
+                                    <motion.div initial={{ opacity: 0, scale: 0.8, y: 50 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.8, y: 50 }} className="bg-white/95 w-full max-w-lg rounded-2xl p-6 md:p-8 shadow-2xl relative text-center" onClick={(e) => e.stopPropagation()}>
                                         <button onClick={() => setShowModal(false)} className="absolute top-4 left-4 text-gray-400 hover:text-red-500"><Icons.Close /></button>
-                                        <h2 className="text-3xl font-bold text-primary mb-4">{slide.modalTitle}</h2>
-                                        <div className="text-lg text-gray-600 bg-gray-50/30 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto">{slide.modalContent}</div>
+                                        <h2 className="text-xl md:text-3xl font-bold text-primary mb-4">{slide.modalTitle}</h2>
+                                        <div className="text-sm md:text-lg text-gray-600 bg-gray-50/30 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto font-medium">{slide.modalContent}</div>
                                     </motion.div>
                                 </div>
                             )}
@@ -433,7 +486,7 @@
                                         <label className="block text-sm font-medium text-gray-700 mb-1">اختر أيقونة للشريحة</label>
                                         <div className="grid grid-cols-4 md:grid-cols-7 gap-2">
                                             {HeroiconsList.map((iconItem) => (
-                                                <button key={iconItem.id} onClick={() => updateSlide(slide.id, 'slideIcon', iconItem.id)} className={`p-3 rounded-lg transition border-2 ${slide.slideIcon === iconItem.id ? 'bg-secondary text-primary border-secondary' : 'bg-white text-gray-400 border-gray-200 hover:border-secondary hover:text-secondary'}`} title={iconItem.name}>{React.createElement(Icons[iconItem.icon], { size: 20 })}</button>
+                                                <button key={iconItem.id} onClick={() => updateSlide(slide.id, 'slideIcon', iconItem.id)} className={`p - 3 rounded - lg transition border - 2 ${ slide.slideIcon === iconItem.id ? 'bg-secondary text-primary border-secondary' : 'bg-white text-gray-400 border-gray-200 hover:border-secondary hover:text-secondary' }`} title={iconItem.name}>{React.createElement(Icons[iconItem.icon], { size: 20 })}</button>
                                             ))}
                                         </div>
                                     </div>
@@ -447,6 +500,25 @@
                         ))}
                         <button onClick={addNewSlide} className="w-full py-4 border-2 border-dashed border-gray-300 rounded-2xl text-gray-500 hover:border-primary hover:text-primary transition flex justify-center items-center gap-2"><Icons.Plus /> إضافة شريحة جديدة</button>
                     </div>
+
+                    <AnimatePresence>
+                        {showHelp && (
+                            <div className="fixed inset-0 bg-primary/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md" onClick={() => setShowHelp(false)}>
+                                <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} className="bg-white/95 w-full max-w-lg rounded-2xl p-8 shadow-2xl relative text-center" onClick={(e) => e.stopPropagation()}>
+                                    <button onClick={() => setShowHelp(false)} className="absolute top-4 left-4 text-gray-400 hover:text-red-500"><Icons.Close /></button>
+                                    <h2 className="text-3xl font-bold text-primary mb-4">تعليمات الاستخدام</h2>
+                                    <div className="text-right space-y-4 text-gray-600">
+                                        <p>1. قم بإضافة الشرائح وتعديل محتواها من لوحة التحكم.</p>
+                                        <p>2. يمكنك إضافة مثال عملي لكل شريحة يظهر عند الضغط على الزر في الشريحة.</p>
+                                        <p>3. اضغط على "ابدأ العرض" للدخول في وضع العرض التقديمي.</p>
+                                        <p>4. في وضع العرض، استخدم الأسهم أو السحب (Swipe) للتنقل.</p>
+                                        <p>5. زر التعديل (القلم) في وضع العرض يعيدك للوحة التحكم.</p>
+                                        <p>6. زر "تنزيل" يمنحك ملف HTML مستقل يعمل في أي مكان.</p>
+                                    </div>
+                                </motion.div>
+                            </div>
+                        )}
+                    </AnimatePresence>
                 </div>
             );
         }
