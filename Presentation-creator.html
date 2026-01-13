@@ -105,6 +105,132 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* SVG Path Animation Styles */
+        .animated-icon {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .animated-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .animated-icon svg path,
+        .animated-icon svg circle,
+        .animated-icon svg line,
+        .animated-icon svg polyline,
+        .animated-icon svg polygon,
+        .animated-icon svg rect {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @keyframes drawPath {
+            0% {
+                stroke-dashoffset: 1000;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                stroke-dashoffset: 0;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                stroke-dashoffset: 1000;
+                opacity: 0;
+            }
+        }
+
+        .animated-icon svg path,
+        .animated-icon svg circle,
+        .animated-icon svg line,
+        .animated-icon svg polyline,
+        .animated-icon svg polygon {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawPath 3s ease-in-out infinite;
+        }
+
+        /* Different animation delays for multiple paths */
+        .animated-icon svg path:nth-child(1) { animation-delay: 0s; }
+        .animated-icon svg path:nth-child(2) { animation-delay: 0.2s; }
+        .animated-icon svg path:nth-child(3) { animation-delay: 0.4s; }
+        .animated-icon svg path:nth-child(4) { animation-delay: 0.6s; }
+        .animated-icon svg path:nth-child(5) { animation-delay: 0.8s; }
+
+        .animated-icon svg circle:nth-child(1) { animation-delay: 0s; }
+        .animated-icon svg circle:nth-child(2) { animation-delay: 0.3s; }
+        .animated-icon svg circle:nth-child(3) { animation-delay: 0.6s; }
+
+        /* For filled icons, use outline animation */
+        .animated-icon-filled svg path {
+            fill: currentColor;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
+        /* Animation for slide icons */
+        .slide-icon-animated {
+            position: relative;
+            display: inline-block;
+        }
+
+        .slide-icon-animated svg {
+            filter: drop-shadow(0 0 8px currentColor);
+            transition: filter 0.3s ease;
+        }
+
+        /* Modal icon animation */
+        .modal-icon-animated {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+        }
+
+        .modal-icon-animated svg {
+            width: 32px !important;
+            height: 32px !important;
+            filter: drop-shadow(0 0 6px currentColor);
+            transition: filter 0.3s ease;
+        }
+
+        /* Ensure SVG elements are visible for animation */
+        .animated-icon svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Pause animation on hover */
+        .animated-icon:hover svg path,
+        .animated-icon:hover svg circle,
+        .animated-icon:hover svg line,
+        .animated-icon:hover svg polyline,
+        .animated-icon:hover svg polygon {
+            animation-play-state: paused;
+            opacity: 1;
+        }
+        
+        /* Smooth transition when animation ends */
+        .animated-icon svg path,
+        .animated-icon svg circle,
+        .animated-icon svg line,
+        .animated-icon svg polyline,
+        .animated-icon svg polygon {
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 
@@ -183,17 +309,61 @@
                     modalContent: "تهدف كليتنا إلى أن تكون رائدة في تعليم التمريض، من خلال توفير بيئة تعليمية محفزة تدعم البحث العلمي والابتكار.",
                     slideIcon: "star",
                     modalIcon: "award",
-                    modalButtonText: "مثال عملي"
+                    modalButtonText: "مثال عملي",
+                    externalLinks: [],
+                    showExternalLinks: false
                 }
             ]);
             const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
             const [mode, setMode] = useState('editor'); // 'editor' or 'presentation'
             const [showModal, setShowModal] = useState(false);
             const [showHelp, setShowHelp] = useState(false);
+            const [footerText, setFooterText] = useState('كلية الشمال للتمريض');
+            const [copyrightLogo, setCopyrightLogo] = useState('https://nre-nec.github.io/pictures/logo.png');
 
             useEffect(() => {
                 lucide.createIcons();
             }, [mode, slides, currentSlideIndex, showModal, showHelp]);
+
+            useEffect(() => {
+                if (mode === 'presentation') {
+                    const animateIconPaths = () => {
+                        setTimeout(() => {
+                            const animatePaths = (selector) => {
+                                const container = document.querySelector(selector);
+                                if (!container) return;
+                                const svg = container.querySelector('svg');
+                                if (!svg) return;
+                                
+                                const paths = svg.querySelectorAll('path, circle, line, polyline, polygon');
+                                paths.forEach((path, idx) => {
+                                    try {
+                                        const length = path.getTotalLength();
+                                        if (length > 0) {
+                                            path.style.strokeDasharray = length;
+                                            path.style.strokeDashoffset = length;
+                                            path.style.animation = `drawPath 3s ease-in-out infinite`;
+                                            path.style.animationDelay = (idx * 0.2) + 's';
+                                            
+                                            // Convert filled paths to stroke for animation
+                                            if (path.getAttribute('fill') && path.getAttribute('fill') !== 'none') {
+                                                path.setAttribute('fill', 'none');
+                                                path.setAttribute('stroke', 'currentColor');
+                                                path.setAttribute('stroke-width', '2');
+                                            }
+                                        }
+                                    } catch(e) {}
+                                });
+                            };
+                            
+                            animatePaths('.slide-icon-animated');
+                            animatePaths('.modal-icon-animated');
+                        }, 100);
+                    };
+                    
+                    animateIconPaths();
+                }
+            }, [mode, currentSlideIndex]);
 
             const addNewSlide = () => {
                 const newId = slides.length > 0 ? Math.max(...slides.map(s => s.id)) + 1 : 1;
@@ -206,7 +376,9 @@
                     modalContent: "تفاصيل إضافية لهذا المثال تظهر هنا...",
                     slideIcon: "lightbulb",
                     modalIcon: "zap",
-                    modalButtonText: "مثال عملي"
+                    modalButtonText: "مثال عملي",
+                    externalLinks: [],
+                    showExternalLinks: false
                 }]);
             };
 
@@ -267,6 +439,54 @@
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* SVG Path Animation Styles */
+        .animated-icon svg path,
+        .animated-icon svg circle,
+        .animated-icon svg line,
+        .animated-icon svg polyline,
+        .animated-icon svg polygon {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawPath 3s ease-in-out infinite;
+        }
+        
+        @keyframes drawPath {
+            0% { stroke-dashoffset: 1000; opacity: 0; }
+            10% { opacity: 1; }
+            50% { stroke-dashoffset: 0; }
+            90% { opacity: 1; }
+            100% { stroke-dashoffset: 1000; opacity: 0; }
+        }
+        
+        @keyframes drawIconPath {
+            0% { stroke-dashoffset: var(--path-length, 1000); opacity: 0; }
+            10% { opacity: 1; }
+            50% { stroke-dashoffset: 0; }
+            90% { opacity: 1; }
+            100% { stroke-dashoffset: var(--path-length, 1000); opacity: 0; }
+        }
+        
+        .slide-icon-animated svg {
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+        
+        .modal-icon-animated {
+            width: 32px;
+            height: 32px;
+            display: inline-block;
+        }
+        
+        .modal-icon-animated svg {
+            width: 32px !important;
+            height: 32px !important;
+            filter: drop-shadow(0 0 6px currentColor);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -284,10 +504,17 @@
 
         <main class="flex-1 flex items-center justify-center p-2 md:p-6 overflow-hidden relative" id="slideContainer"></main>
 
-        <footer class="flex items-center justify-center gap-4 px-4 py-3 bg-white/50 backdrop-blur-md border-t border-white/20 z-50">
-            <span id="slideCounter" class="text-xs md:text-sm text-gray-600 font-bold whitespace-nowrap"></span>
-            <div class="h-2 bg-gray-200/50 flex-1 rounded-full overflow-hidden">
-                <div class="h-full bg-secondary transition-all duration-500 ease-out" id="progressFill" style="width: 0%"></div>
+        <footer class="flex flex-col gap-2 px-4 py-3 bg-white/50 backdrop-blur-md border-t border-white/20 z-50">
+            <div class="flex items-center justify-center gap-4">
+                <span id="slideCounter" class="text-xs md:text-sm text-gray-600 font-bold whitespace-nowrap"></span>
+                <div class="h-2 bg-gray-200/50 flex-1 rounded-full overflow-hidden">
+                    <div class="h-full bg-secondary transition-all duration-500 ease-out" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="flex items-center justify-center gap-2 pt-1 border-t border-gray-200/30">
+                ${copyrightLogo ? `<img src="${copyrightLogo}" alt="Logo" class="h-4 md:h-5 opacity-70" />` : ''}
+                <span class="text-xs text-gray-500 font-medium">${footerText}</span>
+                <span class="text-xs text-gray-400">© ${new Date().getFullYear()}</span>
             </div>
         </footer>
     </div>
@@ -320,7 +547,7 @@
                 <div class="w-full max-w-6xl glass-card rounded-3xl shadow-2xl overflow-hidden border-t-8 border-primary flex flex-col md:flex-row relative z-10 mx-auto" style="max-height: 100%;">
                     <div class="\${slide.image ? 'md:w-1/2' : 'w-full text-center'} p-5 md:p-10 flex flex-col justify-center overflow-y-auto no-scrollbar">
                         <div class="mb-4 md:mb-6">
-                            <div class="text-4xl md:text-6xl mb-2 md:mb-3 text-secondary" id="slideIconContainer"></div>
+                            <div class="text-4xl md:text-6xl mb-2 md:mb-3 text-secondary slide-icon-animated animated-icon" id="slideIconContainer"></div>
                             <h1 class="text-xl sm:text-2xl md:text-5xl font-black text-primary leading-tight">\${slide.title}</h1>
                         </div>
                         <div class="text-base sm:text-lg md:text-2xl text-gray-700 leading-relaxed whitespace-pre-line mb-6 md:mb-8 font-medium">
@@ -332,6 +559,23 @@
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                             </button>
                         </div>
+                        \${slide.showExternalLinks && slide.externalLinks && slide.externalLinks.length > 0 ? \`
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <div class="text-sm font-bold text-gray-600 mb-2">روابط خارجية:</div>
+                                <div class="flex flex-wrap gap-2">
+                                    \${slide.externalLinks.map(link => \`
+                                        <a href="\${link.url}" target="_blank" rel="noopener noreferrer" class="bg-secondary text-primary px-4 py-2 rounded-full text-sm font-bold hover:brightness-110 transition-all flex items-center gap-2">
+                                            <span>\${link.label || link.url}</span>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                                <polyline points="15 3 21 3 21 9"></polyline>
+                                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                                            </svg>
+                                        </a>
+                                    \`).join('')}
+                                </div>
+                            </div>
+                        \` : ''}
                     </div>
                     \${slide.image ? \`
                         <div class="md:w-1/2 bg-gray-50/50 flex items-center justify-center p-4 border-t md:border-t-0 md:border-r border-gray-200/50">
@@ -344,7 +588,7 @@
                 <div id="modalOverlay" class="fixed inset-0 bg-primary/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md hidden" onclick="closeModal()">
                     <div class="bg-white/95 w-full max-w-lg rounded-2xl p-6 md:p-8 shadow-2xl relative text-center" onclick="event.stopPropagation()">
                         <button onclick="closeModal()" class="absolute top-4 left-4 text-gray-400">✕</button>
-                        <div class="text-secondary mb-3 flex justify-center" id="modalIconContainer"></div>
+                        <div class="text-secondary mb-3 flex justify-center modal-icon-animated animated-icon" id="modalIconContainer"></div>
                         <h2 class="text-xl md:text-3xl font-bold text-primary mb-4">\${slide.modalTitle}</h2>
                         <div class="text-sm md:text-lg text-gray-600 bg-gray-50/50 p-4 rounded-xl border-r-4 border-secondary max-h-96 overflow-y-auto font-medium">\${slide.modalContent}</div>
                     </div>
@@ -356,6 +600,39 @@
             const modalIcon = heroIcons[slide.modalIcon] || '<span class="text-4xl text-secondary">✦</span>';
             document.getElementById('slideIconContainer').innerHTML = slideIcon;
             document.getElementById('modalIconContainer').innerHTML = modalIcon;
+
+            // Apply path animation to icons
+            setTimeout(() => {
+                const animateIconPaths = (containerId) => {
+                    const container = document.getElementById(containerId);
+                    if (!container) return;
+                    const svg = container.querySelector('svg');
+                    if (!svg) return;
+                    
+                    const paths = svg.querySelectorAll('path, circle, line, polyline, polygon');
+                    paths.forEach((path, idx) => {
+                        try {
+                            const length = path.getTotalLength();
+                            if (length > 0) {
+                                path.style.strokeDasharray = length;
+                                path.style.strokeDashoffset = length;
+                                path.style.animation = \`drawIconPath 3s ease-in-out infinite\`;
+                                path.style.animationDelay = (idx * 0.2) + 's';
+                                
+                                // For filled paths, convert to stroke
+                                if (path.getAttribute('fill') && path.getAttribute('fill') !== 'none') {
+                                    path.setAttribute('fill', 'none');
+                                    path.setAttribute('stroke', 'currentColor');
+                                    path.setAttribute('stroke-width', '2');
+                                }
+                            }
+                        } catch(e) {}
+                    });
+                };
+                
+                animateIconPaths('slideIconContainer');
+                animateIconPaths('modalIconContainer');
+            }, 100);
 
             document.getElementById('slideCounter').textContent = 'الشريحة ' + (index + 1) + ' من ' + slidesData.length;
             document.getElementById('progressFill').style.width = ((index + 1) / slidesData.length * 100) + '%';
@@ -441,7 +718,7 @@
                                 >
                                     <div className={`p-5 md:p-10 flex flex-col justify-center overflow-y-auto no-scrollbar ${slide.image ? 'md:w-1/2' : 'w-full text-center'}`}>
                                         <div className="mb-4 md:mb-6">
-                                            <div className="text-4xl md:text-6xl mb-2 md:mb-3 text-secondary">
+                                            <div className="text-4xl md:text-6xl mb-2 md:mb-3 text-secondary slide-icon-animated animated-icon">
                                                 {slide.slideIcon && Icons[HeroiconsList.find(i => i.id === slide.slideIcon)?.icon]
                                                     ? React.createElement(Icons[HeroiconsList.find(i => i.id === slide.slideIcon)?.icon], { size: 56 })
                                                     : <span>✦</span>
@@ -455,6 +732,23 @@
                                                 <span>{slide.modalButtonText || 'مثال عملي'}</span><Icons.Left />
                                             </motion.button>
                                         </div>
+                                        {slide.showExternalLinks && slide.externalLinks && slide.externalLinks.length > 0 && (
+                                            <div className="mt-4 pt-4 border-t border-gray-200">
+                                                <div className="text-sm font-bold text-gray-600 mb-2">روابط خارجية:</div>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {slide.externalLinks.map((link, idx) => (
+                                                        <a key={idx} href={link.url} target="_blank" rel="noopener noreferrer" className="bg-secondary text-primary px-4 py-2 rounded-full text-sm font-bold hover:brightness-110 transition-all flex items-center gap-2">
+                                                            <span>{link.label || link.url}</span>
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                                                <polyline points="15 3 21 3 21 9"></polyline>
+                                                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                                                            </svg>
+                                                        </a>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                     {slide.image && (
                                         <div className="md:w-1/2 bg-gray-50/50 flex items-center justify-center p-4 border-t md:border-t-0 md:border-r border-gray-200">
@@ -468,10 +762,17 @@
                             <button onClick={nextSlide} className="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/80 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all hidden md:block z-20"><Icons.Left /></button>
                         </main>
 
-                        <footer className="flex items-center justify-center gap-4 px-4 py-3 bg-white/50 backdrop-blur-md border-t border-white/20 relative z-20">
-                            <span className="text-xs md:text-sm text-gray-600 font-bold whitespace-nowrap">الشريحة {currentSlideIndex + 1} من {slides.length}</span>
-                            <div className="h-2 bg-gray-200/50 flex-1 rounded-full overflow-hidden">
-                                <motion.div className="h-full bg-secondary" initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.5 }} />
+                        <footer className="flex flex-col gap-2 px-4 py-3 bg-white/50 backdrop-blur-md border-t border-white/20 relative z-20">
+                            <div className="flex items-center justify-center gap-4">
+                                <span className="text-xs md:text-sm text-gray-600 font-bold whitespace-nowrap">الشريحة {currentSlideIndex + 1} من {slides.length}</span>
+                                <div className="h-2 bg-gray-200/50 flex-1 rounded-full overflow-hidden">
+                                    <motion.div className="h-full bg-secondary" initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.5 }} />
+                                </div>
+                            </div>
+                            <div className="flex items-center justify-center gap-2 pt-1 border-t border-gray-200/30">
+                                {copyrightLogo && <img src={copyrightLogo} alt="Logo" className="h-4 md:h-5 opacity-70" />}
+                                <span className="text-xs text-gray-500 font-medium">{footerText}</span>
+                                <span className="text-xs text-gray-400">© {new Date().getFullYear()}</span>
                             </div>
                         </footer>
 
@@ -480,10 +781,10 @@
                                 <div className="fixed inset-0 bg-primary/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md" onClick={() => setShowModal(false)}>
                                     <motion.div initial={{ opacity: 0, scale: 0.8, y: 50 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.8, y: 50 }} className="bg-white/95 w-full max-w-lg rounded-2xl p-6 md:p-8 shadow-2xl relative text-center" onClick={(e) => e.stopPropagation()}>
                                         <button onClick={() => setShowModal(false)} className="absolute top-4 left-4 text-gray-400 hover:text-red-500"><Icons.Close /></button>
-                                        <div className="text-secondary mb-3 flex justify-center">
+                                        <div className="text-secondary mb-3 flex justify-center modal-icon-animated animated-icon">
                                             {slide.modalIcon && Icons[HeroiconsList.find(i => i.id === slide.modalIcon)?.icon]
-                                                ? React.createElement(Icons[HeroiconsList.find(i => i.id === slide.modalIcon)?.icon], { size: 48 })
-                                                : <Icons.Help size={48} />
+                                                ? React.createElement(Icons[HeroiconsList.find(i => i.id === slide.modalIcon)?.icon], { size: 32 })
+                                                : <Icons.Help size={32} />
                                             }
                                         </div>
                                         <h2 className="text-xl md:text-3xl font-bold text-primary mb-4">{slide.modalTitle}</h2>
@@ -507,6 +808,25 @@
                         </div>
                     </header>
                     <div className="space-y-6">
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                            <h3 className="font-bold text-lg text-primary mb-4 border-b pb-2">إعدادات التذييل</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">نص التذييل</label>
+                                    <input type="text" value={footerText} onChange={(e) => setFooterText(e.target.value)} placeholder="مثال: كلية الشمال للتمريض" className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" />
+                                </div>
+                                <div className="col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">رابط شعار حقوق النشر (اتركه فارغاً لإخفاء الشعار)</label>
+                                    <input type="text" value={copyrightLogo} onChange={(e) => setCopyrightLogo(e.target.value)} placeholder="https://..." className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none text-left" dir="ltr" />
+                                    {copyrightLogo && (
+                                        <div className="mt-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
+                                            <p className="text-xs text-gray-600 mb-1">معاينة الشعار:</p>
+                                            <img src={copyrightLogo} alt="Copyright Logo Preview" className="h-6 opacity-70" onError={(e) => { e.target.style.display = 'none'; }} />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                         {slides.map((slide, index) => (
                             <motion.div layout key={slide.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
                                 <div className="flex justify-between items-center mb-4 border-b pb-2">
@@ -537,7 +857,10 @@
                                     <div className="bg-gray-50 p-4 rounded-xl col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="col-span-2 text-xs font-bold text-secondary uppercase tracking-widest">بيانات المثال العملي (النافذة)</div>
                                         <input type="text" placeholder="عنوان النافذة" value={slide.modalTitle} onChange={(e) => updateSlide(slide.id, 'modalTitle', e.target.value)} className="w-full p-2 border rounded-lg" />
-                                        <input type="text" placeholder="نص المثال..." value={slide.modalContent} onChange={(e) => updateSlide(slide.id, 'modalContent', e.target.value)} className="w-full p-2 border rounded-lg" />
+                                        <div className="col-span-2">
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">نص المثال</label>
+                                            <textarea rows="4" placeholder="نص المثال..." value={slide.modalContent} onChange={(e) => updateSlide(slide.id, 'modalContent', e.target.value)} className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none resize-y min-h-[100px]" />
+                                        </div>
                                         <input type="text" placeholder="نص الزر (مثال: مثال عملي)" value={slide.modalButtonText} onChange={(e) => updateSlide(slide.id, 'modalButtonText', e.target.value)} className="w-full p-2 border rounded-lg" />
                                         <div className="col-span-2">
                                             <label className="block text-xs font-bold text-gray-400 mb-2 uppercase">أيقونة النافذة</label>
@@ -546,6 +869,41 @@
                                                     <button key={iconItem.id} onClick={() => updateSlide(slide.id, 'modalIcon', iconItem.id)} className={`p-1.5 rounded-md transition border ${slide.modalIcon === iconItem.id ? 'bg-secondary text-primary border-secondary' : 'bg-white text-gray-400 border-gray-100 hover:border-secondary'}`} title={iconItem.name}>{React.createElement(Icons[iconItem.icon], { size: 14 })}</button>
                                                 ))}
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-blue-50 p-4 rounded-xl col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="col-span-2 flex items-center justify-between">
+                                            <div className="text-xs font-bold text-blue-600 uppercase tracking-widest">الروابط الخارجية</div>
+                                            <label className="flex items-center gap-2 cursor-pointer">
+                                                <input type="checkbox" checked={slide.showExternalLinks || false} onChange={(e) => updateSlide(slide.id, 'showExternalLinks', e.target.checked)} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+                                                <span className="text-sm font-medium text-gray-700">إظهار الروابط في العرض</span>
+                                            </label>
+                                        </div>
+                                        <div className="col-span-2 space-y-2">
+                                            {(slide.externalLinks || []).map((link, idx) => (
+                                                <div key={idx} className="flex gap-2">
+                                                    <input type="text" placeholder="عنوان الرابط (مثال: موقع الكلية)" value={link.label || ''} onChange={(e) => {
+                                                        const newLinks = [...(slide.externalLinks || [])];
+                                                        newLinks[idx] = { ...newLinks[idx], label: e.target.value };
+                                                        updateSlide(slide.id, 'externalLinks', newLinks);
+                                                    }} className="flex-1 p-2 border rounded-lg" />
+                                                    <input type="text" placeholder="الرابط (URL)" value={link.url || ''} onChange={(e) => {
+                                                        const newLinks = [...(slide.externalLinks || [])];
+                                                        newLinks[idx] = { ...newLinks[idx], url: e.target.value };
+                                                        updateSlide(slide.id, 'externalLinks', newLinks);
+                                                    }} className="flex-1 p-2 border rounded-lg text-left" dir="ltr" />
+                                                    <button onClick={() => {
+                                                        const newLinks = (slide.externalLinks || []).filter((_, i) => i !== idx);
+                                                        updateSlide(slide.id, 'externalLinks', newLinks);
+                                                    }} className="text-red-400 hover:text-red-600 p-2"><Icons.Trash /></button>
+                                                </div>
+                                            ))}
+                                            <button onClick={() => {
+                                                const newLinks = [...(slide.externalLinks || []), { url: '', label: '' }];
+                                                updateSlide(slide.id, 'externalLinks', newLinks);
+                                            }} className="w-full py-2 border-2 border-dashed border-blue-300 rounded-lg text-blue-600 hover:border-blue-500 hover:text-blue-700 transition flex justify-center items-center gap-2 text-sm font-medium">
+                                                <Icons.Plus size={16} /> إضافة رابط خارجي
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
